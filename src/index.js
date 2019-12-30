@@ -1,13 +1,22 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { createStore, combineReducers, applyMiddleware } from 'redux';
+import { Provider } from 'react-redux';
+import thunkMiddleware from 'redux-thunk';
 import { BrowserRouter } from 'react-router-dom';
 import './index.scss';
-import App from './containers/App';
+import App from './containers/App/App';
 import * as serviceWorker from './serviceWorker';
+
+import { autocompleteSearch, autocompleteSelect } from './containers/App/reducers';
+const rootReducer = combineReducers({ autocompleteSearch, autocompleteSelect });
+const store = createStore(rootReducer, applyMiddleware(thunkMiddleware));
 
 ReactDOM.render(
   <BrowserRouter>
-    <App />
+    <Provider store={store}>
+      <App />
+    </Provider>
   </BrowserRouter>, document.getElementById('root'));
 
 // If you want your app to work offline and load faster, you can change
