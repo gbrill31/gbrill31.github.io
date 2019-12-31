@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { toast } from 'react-toastify';
 import {
@@ -43,6 +43,8 @@ function WeatherForecast({
   citiesFound, isPending, autocompleteSearch, searchError, selectedCity,
   setCityName, selectedCityName, saveToFavorites, favorites
 }) {
+  const [searchInput, setSearchInput] = useState('');
+  const [isSearchInputError, setIsSearchInputError] = useState(false);
 
   useEffect(() => {
     if (selectedCityName === null) {
@@ -64,6 +66,16 @@ function WeatherForecast({
     return isSaved;
   }
 
+  const handleSearchChange = (event) => {
+    if (/^[a-zA-Z]*$/g.test(event.target.value)) {
+      setSearchInput(event.target.value);
+      autocompleteSearch(event.target.value);
+      setIsSearchInputError(false);
+    } else {
+      setIsSearchInputError(true);
+    }
+  }
+
 
   return (
     <Fragment>
@@ -72,6 +84,7 @@ function WeatherForecast({
           freeSolo
           id="weather-autocomplete-search"
           className="autocompleteField"
+          inputValue={searchInput}
           options={citiesFound.map(city => city.LocalizedName)}
           loading={isPending}
           clearOnEscape
@@ -89,13 +102,12 @@ function WeatherForecast({
             return (
               <TextField
                 {...params}
-                label="Search City"
+                label={`Search City ${isSearchInputError ? '(*English characters only)' : ''}`}
                 margin="normal"
                 variant="outlined"
+                error={isSearchInputError}
                 fullWidth
-                onChange={(event) => {
-                  autocompleteSearch(event.target.value);
-                }}
+                onChange={handleSearchChange}
                 InputProps={{
                   ...params.InputProps,
                   type: 'text',
