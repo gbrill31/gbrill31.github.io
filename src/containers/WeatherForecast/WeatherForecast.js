@@ -4,15 +4,15 @@ import {
   TextField, Container, CircularProgress, Paper
 } from '@material-ui/core';
 import Autocomplete from '@material-ui/lab/Autocomplete';
-import CurrentConditions from '../CurrentConditions/CurrentConditions';
-import Forecast from '../Forecast/Forecast';
+import CurrentConditions from '../../components/CurrentConditions/CurrentConditions';
+import Forecast from '../../components/Forecast/Forecast';
 
 import './WeatherForecast.scss';
 
 import {
   searchCities,
   setSlectedCityName
-} from '../../containers/App/actions';
+} from './actions';
 
 const mapStateToProps = state => ({
   isPending: state.autocompleteSearch.isPending,

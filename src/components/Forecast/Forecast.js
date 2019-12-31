@@ -8,7 +8,7 @@ import './Forecast.scss';
 
 import {
   getCityForecast
-} from '../../containers/App/actions';
+} from '../../containers/WeatherForecast/actions';
 
 const mapStateToProps = state => ({
   forecast: state.weatherForecast.forecast

@@ -13,7 +13,7 @@ import {
   autocompleteSelect,
   weatherConditions,
   weatherForecast
-} from './containers/App/reducers';
+} from './containers/WeatherForecast/reducers';
 const rootReducer = combineReducers({
   autocompleteSearch, autocompleteSelect, weatherConditions, weatherForecast
 });
