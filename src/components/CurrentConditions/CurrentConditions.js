@@ -1,25 +1,11 @@
-import React, { useEffect } from 'react';
-import { connect } from 'react-redux';
+import React, { useState, useCallback, useEffect } from 'react';
 import { toast } from 'react-toastify';
-import { Card, CardContent, Typography, CardMedia } from '@material-ui/core';
+import { Card, CardContent, Typography, CardMedia, Icon } from '@material-ui/core';
+import FavoriteIcon from '@material-ui/icons/Favorite';
 import { makeStyles } from '@material-ui/core/styles';
 
 import './CurrentConditions.scss';
-
-
-import {
-  getCityCurrentConditions
-} from '../../containers/WeatherForecast/actions';
-
-const mapStateToProps = state => ({
-  currentConditions: state.weatherConditions.currentConditions,
-  conditionsError: state.weatherConditions.error,
-});
-
-const mapDispathToProps = dispatch => ({
-  getCurrentConditions: city => dispatch(getCityCurrentConditions(city))
-});
-
+import { config, apiRequests } from '../../api/weatherConfig';
 
 
 const useStyles = makeStyles(theme => ({
@@ -40,23 +26,31 @@ const useStyles = makeStyles(theme => ({
 }));
 
 function CurrentConditions({
-  city, getCurrentConditions, currentConditions, conditionsError
+  city, isInFavorites
 }) {
   const classes = useStyles();
+  const [currentConditions, setCurrentConditions] = useState(null);
 
-  useEffect(() => {
-    getCurrentConditions(city);
-  }, [getCurrentConditions, city]);
-
-  useEffect(() => {
-    if (conditionsError) {
-      toast.error(conditionsError, { autoClose: false });
+  const requestCurrentConditions = useCallback(async (city) => {
+    try {
+      const res = await fetch(`${apiRequests.currentConditions}${city.Key}?apikey=${config.key}`);
+      const data = await res.json();
+      if (!data.message) {
+        setCurrentConditions(data[0]);
+      } else {
+        toast.error(data.message, { autoClose: false });
+      }
+    } catch (err) {
+      toast.error('No current weather conditions found', { autoClose: false });
     }
+  }, []);
 
-  }, [conditionsError]);
+  useEffect(() => {
+    requestCurrentConditions(city);
+  }, [requestCurrentConditions, city]);
 
   const getTemprature = () => {
-    const units = currentConditions.Temperature.Metric.Unit === 'C' ? 'celsius' : 'fahrenheit';
+    const units = 'celsius';//currentConditions.Temperature.Metric.Unit === 'C' ? 'celsius' : 'fahrenheit';
     return `${currentConditions.Temperature.Metric.Value}º (${units})`;
   }
 
@@ -72,7 +66,15 @@ function CurrentConditions({
           <CardContent className={classes.content}>
             <Typography component="h3" variant="h3">
               {city.LocalizedName}
+              {
+                isInFavorites && (
+                  <Icon style={{ color: '#ab3f3f', marginLeft: '5px' }}>
+                    <FavoriteIcon />
+                  </Icon>
+                )
+              }
             </Typography>
+
             <Typography component="h5" variant="h5">
               {getTemprature()}
             </Typography>
@@ -86,4 +88,4 @@ function CurrentConditions({
   )
 };
 
-export default connect(mapStateToProps, mapDispathToProps)(CurrentConditions);
+export default CurrentConditions;

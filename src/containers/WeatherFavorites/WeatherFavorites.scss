@@ -1,0 +1,10 @@
+.favoritesWrapper{
+  display: flex;
+  flex-flow: row wrap;
+  margin-top: 35px;
+
+  .favoriteWrapper{
+    border: 1px solid black;
+    margin: 10px 10px 10px 0;
+  }
+}

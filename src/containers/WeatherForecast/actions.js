@@ -4,9 +4,6 @@ import {
   ON_AUTOCOMPLETE_FAILED,
   ON_AUTOCOMPLETE_SELECTED,
   ON_AUTOCOMPLETE_SELECTED_DATA,
-  ON_REQUEST_CURRENT_CONDITIONS_PENDING,
-  ON_REQUEST_CURRENT_CONDITIONS_SUCCESS,
-  ON_REQUEST_CURRENT_CONDITIONS_FAILED,
   ON_REQUEST_FORECAST_PENDING,
   ON_REQUEST_FORECAST_SUCCESS,
   ON_REQUEST_FORECAST_FAILED
@@ -61,36 +58,6 @@ const autocompleteSearch = async (name, dispatch) => {
       payload: []
     });
   }
-}
-
-const requestCurrentConditions = async (city, dispatch) => {
-  // try {
-  //   dispatch({ type: ON_REQUEST_CURRENT_CONDITIONS_PENDING });
-  //   const res = await fetch(`${apiRequests.currentConditions}${city.Key}?apikey=${config.key}`);
-  //   const data = await res.json();
-  //   if (!data.message) {
-  //     dispatch({
-  //       type: ON_REQUEST_CURRENT_CONDITIONS_SUCCESS,
-  //       payload: data[0]
-  //     });
-  //   } else {
-  //     dispatch({
-  //       type: ON_REQUEST_CURRENT_CONDITIONS_FAILED,
-  //       payload: data.message
-  //     });
-  //   }
-  // } catch (err) {
-  //   dispatch({
-  //     type: ON_REQUEST_CURRENT_CONDITIONS_FAILED,
-  //     payload: 'No current weather conditions found'
-  //   });
-  // }
-
-  /**For local use */
-  dispatch({
-    type: ON_REQUEST_CURRENT_CONDITIONS_SUCCESS,
-    payload: selectedCurrentConditions[0]
-  });
 }
 
 const requestForecast = async (city, dispatch) => {
@@ -154,10 +121,6 @@ const searchCities = name => (dispatch) => {
   autocompleteSearch(name, dispatch);
 };
 
-const getCityCurrentConditions = city => (dispatch) => {
-  requestCurrentConditions(city, dispatch);
-}
-
 const getCityForecast = city => (dispatch) => {
   requestForecast(city, dispatch);
 }
@@ -165,6 +128,5 @@ const getCityForecast = city => (dispatch) => {
 export {
   searchCities,
   setSlectedCityName,
-  getCityCurrentConditions,
   getCityForecast
 };

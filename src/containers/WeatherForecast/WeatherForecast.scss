@@ -3,8 +3,23 @@
   margin: 0 auto;
 }
 
-.forcastWrapper{
+.forecastWrapper{
   // position: relative;
   min-height: 100px;
   margin-top: 15px;
+
+  .forecastHeader {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-between;
+
+    .currentConditions{
+      justify-self: flex-start;
+    }
+    .addToFavoritesBtn{
+      justify-self: flex-end;
+      margin: 15px 15px 0 0;
+      height: 45px;
+    }
+  }
 }

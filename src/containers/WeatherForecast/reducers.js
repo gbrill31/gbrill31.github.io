@@ -4,9 +4,6 @@ import {
   ON_AUTOCOMPLETE_FAILED,
   ON_AUTOCOMPLETE_SELECTED,
   ON_AUTOCOMPLETE_SELECTED_DATA,
-  ON_REQUEST_CURRENT_CONDITIONS_PENDING,
-  ON_REQUEST_CURRENT_CONDITIONS_SUCCESS,
-  ON_REQUEST_CURRENT_CONDITIONS_FAILED,
   ON_REQUEST_FORECAST_PENDING,
   ON_REQUEST_FORECAST_SUCCESS,
   ON_REQUEST_FORECAST_FAILED
@@ -22,11 +19,6 @@ const INITIAL_STATE = {
     error: null,
     selected: null,
     city: null
-  },
-  weatherConditions: {
-    isPending: false,
-    currentConditions: null,
-    error: null
   },
   weatherForecast: {
     isPending: false,
@@ -54,19 +46,6 @@ const autocomplete = (state = INITIAL_STATE.search, action = {}) => {
   }
 };
 
-const weatherConditions = (state = INITIAL_STATE.weatherConditions, action = {}) => {
-  switch (action.type) {
-    case ON_REQUEST_CURRENT_CONDITIONS_PENDING:
-      return { ...state, isPending: true };
-    case ON_REQUEST_CURRENT_CONDITIONS_SUCCESS:
-      return { ...state, currentConditions: action.payload, isPending: false };
-    case ON_REQUEST_CURRENT_CONDITIONS_FAILED:
-      return { ...state, error: action.payload, isPending: false };
-    default:
-      return state;
-  }
-};
-
 const weatherForecast = (state = INITIAL_STATE.weatherForecast, action = {}) => {
   switch (action.type) {
     case ON_REQUEST_FORECAST_PENDING:
@@ -82,6 +61,5 @@ const weatherForecast = (state = INITIAL_STATE.weatherForecast, action = {}) => 
 
 export {
   autocomplete,
-  weatherConditions,
   weatherForecast
 }

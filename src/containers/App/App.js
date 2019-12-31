@@ -4,7 +4,7 @@ import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import HeaderNav from '../../components/HeaderNav/HeaderNav';
 import WeatherForecast from '../WeatherForecast/WeatherForecast';
-import WeatherFavorites from '../../components/WeatherFavorites/WeatherFavorites';
+import WeatherFavorites from '../WeatherFavorites/WeatherFavorites';
 
 import './App.scss';
 
