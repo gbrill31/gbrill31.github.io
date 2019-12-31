@@ -34,7 +34,7 @@ function WeatherForecast({
 }) {
 
   useEffect(() => {
-    if (selectedCityName === '') {
+    if (selectedCityName === null) {
       setCityName('Tel Aviv');
       autocompleteSearch('Tel Aviv');
     }
@@ -56,11 +56,13 @@ function WeatherForecast({
           freeSolo
           id="weather-autocomplete-search"
           className="autocompleteField"
-          // open={citiesFound.length > 0}
           options={citiesFound.map(city => city.LocalizedName)}
           loading={isPending}
           clearOnEscape
           noOptionsText="No cities found..."
+          onFocus={() => {
+            autocompleteSearch('');
+          }}
           onChange={(event, city) => {
             if (city) {
               setCityName(city);

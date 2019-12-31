@@ -20,7 +20,7 @@ const INITIAL_STATE = {
     isPending: false,
     cities: [],
     error: null,
-    selected: '',
+    selected: null,
     city: null
   },
   weatherConditions: {
