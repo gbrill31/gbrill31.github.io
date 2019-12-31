@@ -26,12 +26,12 @@ const INITIAL_STATE = {
   weatherConditions: {
     isPending: false,
     currentConditions: null,
-    error: ''
+    error: null
   },
   weatherForecast: {
     isPending: false,
     forecast: null,
-    error: ''
+    error: null
   }
 }
 
@@ -46,8 +46,8 @@ const autocomplete = (state = INITIAL_STATE.search, action = {}) => {
     case ON_AUTOCOMPLETE_SELECTED:
       return { ...state, selected: action.payload };
     case ON_AUTOCOMPLETE_SELECTED_DATA:
-      // const cityObj = autocompleteCities.find(city => city.LocalizedName.toLowerCase() === action.payload.toLowerCase());
-      const cityObj = state.cities.find(city => city.LocalizedName.toLowerCase() === action.payload.toLowerCase());
+      const cityObj = autocompleteCities.find(city => city.LocalizedName.toLowerCase() === action.payload.toLowerCase());
+      // const cityObj = state.cities.find(city => city.LocalizedName.toLowerCase() === action.payload.toLowerCase());
       return { ...state, city: cityObj };
     default:
       return state;

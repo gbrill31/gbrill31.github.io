@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
+import { toast } from 'react-toastify';
 import { Card, CardContent, Typography, CardMedia } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
@@ -11,7 +12,8 @@ import {
 } from '../../containers/WeatherForecast/actions';
 
 const mapStateToProps = state => ({
-  currentConditions: state.weatherConditions.currentConditions
+  currentConditions: state.weatherConditions.currentConditions,
+  conditionsError: state.weatherConditions.error,
 });
 
 const mapDispathToProps = dispatch => ({
@@ -37,12 +39,21 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-function CurrentConditions({ city, getCurrentConditions, currentConditions }) {
+function CurrentConditions({
+  city, getCurrentConditions, currentConditions, conditionsError
+}) {
   const classes = useStyles();
 
   useEffect(() => {
     getCurrentConditions(city);
   }, [getCurrentConditions, city]);
+
+  useEffect(() => {
+    if (conditionsError) {
+      toast.error(conditionsError, { autoClose: false });
+    }
+
+  }, [conditionsError]);
 
   const getTemprature = () => {
     const units = currentConditions.Temperature.Metric.Unit === 'C' ? 'celsius' : 'fahrenheit';

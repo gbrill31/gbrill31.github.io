@@ -18,31 +18,36 @@ import selectedCurrentConditions from '../../currentWeather.json';
 import forecast from '../../forecast.json';
 
 const requestCitySearch = async (name) => {
-  try {
-    const res = await fetch(`${apiRequests.autocomplete}?apikey=${config.key}&q=${name}`);
-    const data = await res.json();
-    return data;
-  } catch (err) {
-    return err;
-  }
+  // try {
+  //   const res = await fetch(`${apiRequests.autocomplete}?apikey=${config.key}&q=${name}`);
+  //   const data = await res.json();
+  //   return data;
+  // } catch (err) {
+  //   return err;
+  // }
+
+  /**For local use */
+  return autocompleteCities.filter(city => city.LocalizedName.toLowerCase().includes(name.toLowerCase()));
 }
 
 
 const autocompleteSearch = async (name, dispatch) => {
-  // const foundCities = name.length && autocompleteCities.filter(city => city.LocalizedName.toLowerCase().includes(name.toLowerCase()));
-  // dispatch({
-  //   type: ON_AUTOCOMPLETE_SUCCESS,
-  //   payload: foundCities || []
-  // });
-
   if (name.length) {
     dispatch({ type: ON_AUTOCOMPLETE_PENDING });
     try {
       const data = await requestCitySearch(name);
-      dispatch({
-        type: ON_AUTOCOMPLETE_SUCCESS,
-        payload: data
-      });
+      if (!data.message) {
+        dispatch({
+          type: ON_AUTOCOMPLETE_SUCCESS,
+          payload: data
+        });
+      } else {
+        dispatch({
+          type: ON_AUTOCOMPLETE_FAILED,
+          payload: data.message
+        });
+      }
+
     } catch (err) {
       dispatch({
         type: ON_AUTOCOMPLETE_FAILED,
@@ -59,46 +64,63 @@ const autocompleteSearch = async (name, dispatch) => {
 }
 
 const requestCurrentConditions = async (city, dispatch) => {
-  try {
-    dispatch({ type: ON_REQUEST_CURRENT_CONDITIONS_PENDING });
-    const res = await fetch(`${apiRequests.currentConditions}${city.Key}?apikey=${config.key}`);
-    const data = await res.json();
-    dispatch({
-      type: ON_REQUEST_CURRENT_CONDITIONS_SUCCESS,
-      payload: data[0]
-    });
-  } catch (err) {
-    dispatch({
-      type: ON_REQUEST_CURRENT_CONDITIONS_FAILED,
-      payload: err.Message
-    });
-  }
+  // try {
+  //   dispatch({ type: ON_REQUEST_CURRENT_CONDITIONS_PENDING });
+  //   const res = await fetch(`${apiRequests.currentConditions}${city.Key}?apikey=${config.key}`);
+  //   const data = await res.json();
+  //   if (!data.message) {
+  //     dispatch({
+  //       type: ON_REQUEST_CURRENT_CONDITIONS_SUCCESS,
+  //       payload: data[0]
+  //     });
+  //   } else {
+  //     dispatch({
+  //       type: ON_REQUEST_CURRENT_CONDITIONS_FAILED,
+  //       payload: data.message
+  //     });
+  //   }
+  // } catch (err) {
+  //   dispatch({
+  //     type: ON_REQUEST_CURRENT_CONDITIONS_FAILED,
+  //     payload: 'No current weather conditions found'
+  //   });
+  // }
 
-  // dispatch({
-  //   type: ON_REQUEST_CURRENT_CONDITIONS_SUCCESS,
-  //   payload: selectedCurrentConditions[0]
-  // });
+  /**For local use */
+  dispatch({
+    type: ON_REQUEST_CURRENT_CONDITIONS_SUCCESS,
+    payload: selectedCurrentConditions[0]
+  });
 }
 
 const requestForecast = async (city, dispatch) => {
-  try {
-    dispatch({ type: ON_REQUEST_FORECAST_PENDING });
-    const res = await fetch(`${apiRequests.forecast}${city.Key}?apikey=${config.key}&metric=true`);
-    const data = await res.json();
-    dispatch({
-      type: ON_REQUEST_FORECAST_SUCCESS,
-      payload: data
-    });
-  } catch (err) {
-    dispatch({
-      type: ON_REQUEST_FORECAST_FAILED,
-      payload: err.Message
-    });
-  }
-  // dispatch({
-  //   type: ON_REQUEST_FORECAST_SUCCESS,
-  //   payload: forecast
-  // });
+  // try {
+  //   dispatch({ type: ON_REQUEST_FORECAST_PENDING });
+  //   const res = await fetch(`${apiRequests.forecast}${city.Key}?apikey=${config.key}&metric=true`);
+  //   const data = await res.json();
+  //   if (!data.message) {
+  //     dispatch({
+  //       type: ON_REQUEST_FORECAST_SUCCESS,
+  //       payload: data
+  //     });
+  //   } else {
+  //     dispatch({
+  //       type: ON_REQUEST_FORECAST_FAILED,
+  //       payload: data.message
+  //     });
+  //   }
+  // } catch (err) {
+  //   dispatch({
+  //     type: ON_REQUEST_FORECAST_FAILED,
+  //     payload: 'No weather forcast found'
+  //   });
+  // }
+
+  /**For local use */
+  dispatch({
+    type: ON_REQUEST_FORECAST_SUCCESS,
+    payload: forecast
+  });
 }
 
 const setSelectedCity = async (name, dispatch) => {

@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
+import { toast } from 'react-toastify';
 import {
   Typography
 } from '@material-ui/core';
@@ -11,7 +12,8 @@ import {
 } from '../../containers/WeatherForecast/actions';
 
 const mapStateToProps = state => ({
-  forecast: state.weatherForecast.forecast
+  forecast: state.weatherForecast.forecast,
+  forecastError: state.weatherForecast.error,
 });
 
 const mapDispathToProps = dispatch => ({
@@ -19,13 +21,19 @@ const mapDispathToProps = dispatch => ({
 });
 
 
-function Forecast({ city, forecast, getForecast }) {
+function Forecast({ city, forecast, getForecast, forecastError }) {
 
   useEffect(() => {
     getForecast(city);
   }, [getForecast, city]);
 
-  // const { Headline, DailyForecasts } = forecast;
+  useEffect(() => {
+    if (forecastError) {
+      toast.error(forecastError, { autoClose: false });
+    }
+
+  }, [forecastError]);
+
 
   const getDayOfTheWeek = (date) => {
     const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];

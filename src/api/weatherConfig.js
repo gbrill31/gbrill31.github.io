@@ -1,5 +1,5 @@
 const config = {
-  key: 'Mq6mGm0TnqchjtFJCG6Xw396tS1gnnJr'
+  key: 'OXilFpFVsVgvY0Pyk6dgNytOcSDt2FZf'
 };
 
 const apiRequests = {
