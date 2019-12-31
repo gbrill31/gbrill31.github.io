@@ -6,6 +6,7 @@ import { makeStyles } from '@material-ui/core/styles';
 
 import './CurrentConditions.scss';
 import { config, apiRequests } from '../../api/weatherConfig';
+import selectedCurrentConditions from '../../currentWeather.json';
 
 
 const useStyles = makeStyles(theme => ({
@@ -32,17 +33,20 @@ function CurrentConditions({
   const [currentConditions, setCurrentConditions] = useState(null);
 
   const requestCurrentConditions = useCallback(async (city) => {
-    try {
-      const res = await fetch(`${apiRequests.currentConditions}${city.Key}?apikey=${config.key}`);
-      const data = await res.json();
-      if (!data.message) {
-        setCurrentConditions(data[0]);
-      } else {
-        toast.error(data.message, { autoClose: false });
-      }
-    } catch (err) {
-      toast.error('No current weather conditions found', { autoClose: false });
-    }
+    // try {
+    //   const res = await fetch(`${apiRequests.currentConditions}${city.Key}?apikey=${config.key}`);
+    //   const data = await res.json();
+    //   if (!data.message) {
+    //     setCurrentConditions(data[0]);
+    //   } else {
+    //     toast.error(data.message, { autoClose: false });
+    //   }
+    // } catch (err) {
+    //   toast.error('No current weather conditions found', { autoClose: false });
+    // }
+
+    /**For local use */
+    return setCurrentConditions(selectedCurrentConditions[0]);
   }, []);
 
   useEffect(() => {
