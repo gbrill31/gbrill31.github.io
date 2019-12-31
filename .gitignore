@@ -19,7 +19,7 @@
 .env.production.local
 autocomplete.json
 currentWeather.json
-fivedayForecast.json
+forecast.json
 
 npm-debug.log*
 yarn-debug.log*
