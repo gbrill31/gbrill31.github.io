@@ -1,6 +1,5 @@
 import {
-  ON_FAVORITES_SAVE,
-  ON_FAVORITES_LOAD
+  ON_FAVORITES_UPDATE
 } from './constants';
 
 const INITIAL_STATE = {
@@ -12,9 +11,7 @@ const INITIAL_STATE = {
 
 const weatherFavorites = (state = INITIAL_STATE.favorites, action = {}) => {
   switch (action.type) {
-    case ON_FAVORITES_SAVE:
-      return { ...state, items: action.payload };
-    case ON_FAVORITES_LOAD:
+    case ON_FAVORITES_UPDATE:
       return { ...state, items: action.payload };
     default:
       return state;
