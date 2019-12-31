@@ -1,5 +1,6 @@
 import React, { Fragment, useEffect } from 'react';
 import { connect } from 'react-redux';
+import { toast } from 'react-toastify';
 import {
   TextField, Container, CircularProgress, Paper
 } from '@material-ui/core';
@@ -15,11 +16,11 @@ import {
 } from './actions';
 
 const mapStateToProps = state => ({
-  isPending: state.autocompleteSearch.isPending,
-  citiesFound: state.autocompleteSearch.cities,
-  requestError: state.autocompleteSearch.error,
-  selectedCityName: state.autocompleteSelect.selected,
-  selectedCity: state.autocompleteSelect.data,
+  isPending: state.autocomplete.isPending,
+  citiesFound: state.autocomplete.cities,
+  searchError: state.autocomplete.error,
+  selectedCityName: state.autocomplete.selected,
+  selectedCity: state.autocomplete.city,
 });
 
 const mapDispathToProps = dispatch => ({
@@ -28,16 +29,24 @@ const mapDispathToProps = dispatch => ({
 });
 
 function WeatherForecast({
-  citiesFound, isPending, autocompleteSearch, requestError, selectedCity,
+  citiesFound, isPending, autocompleteSearch, searchError, selectedCity,
   setCityName, selectedCityName
 }) {
 
   useEffect(() => {
     if (selectedCityName === '') {
       setCityName('Tel Aviv');
+      autocompleteSearch('Tel Aviv');
     }
     return () => { };
-  }, [setCityName, selectedCity, selectedCityName]);
+  }, [setCityName, selectedCity, selectedCityName, autocompleteSearch]);
+
+  useEffect(() => {
+    if (searchError) {
+      toast.error(searchError);
+    }
+
+  }, [searchError]);
 
   return (
     <Fragment>
@@ -46,10 +55,9 @@ function WeatherForecast({
           freeSolo
           id="weather-autocomplete-search"
           className="autocompleteField"
-          open={citiesFound.length > 0}
+          // open={citiesFound.length > 0}
           options={citiesFound.map(city => city.LocalizedName)}
           loading={isPending}
-          blurOnSelect
           clearOnEscape
           noOptionsText="No cities found..."
           onChange={(event, city) => {
@@ -71,7 +79,7 @@ function WeatherForecast({
                 }}
                 InputProps={{
                   ...params.InputProps,
-                  type: 'search',
+                  type: 'text',
                   endAdornment: (
                     <Fragment>
                       {isPending ? <CircularProgress color="inherit" size={20} /> : null}

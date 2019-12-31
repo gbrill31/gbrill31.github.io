@@ -9,13 +9,12 @@ import App from './containers/App/App';
 import * as serviceWorker from './serviceWorker';
 
 import {
-  autocompleteSearch,
-  autocompleteSelect,
+  autocomplete,
   weatherConditions,
   weatherForecast
 } from './containers/WeatherForecast/reducers';
 const rootReducer = combineReducers({
-  autocompleteSearch, autocompleteSelect, weatherConditions, weatherForecast
+  autocomplete, weatherConditions, weatherForecast
 });
 const store = createStore(rootReducer, applyMiddleware(thunkMiddleware));
 

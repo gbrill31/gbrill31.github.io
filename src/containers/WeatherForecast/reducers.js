@@ -13,15 +13,15 @@ import {
 
 } from './constants';
 
+import autocompleteCities from '../../autocomplete.json';
+
 const INITIAL_STATE = {
   search: {
     isPending: false,
     cities: [],
-    error: ''
-  },
-  city: {
+    error: null,
     selected: '',
-    data: null
+    city: null
   },
   weatherConditions: {
     isPending: false,
@@ -35,7 +35,7 @@ const INITIAL_STATE = {
   }
 }
 
-const autocompleteSearch = (state = INITIAL_STATE.search, action = {}) => {
+const autocomplete = (state = INITIAL_STATE.search, action = {}) => {
   switch (action.type) {
     case ON_AUTOCOMPLETE_PENDING:
       return { ...state, isPending: true };
@@ -43,17 +43,12 @@ const autocompleteSearch = (state = INITIAL_STATE.search, action = {}) => {
       return { ...state, isPending: false, cities: action.payload };
     case ON_AUTOCOMPLETE_FAILED:
       return { ...state, isPending: false, error: action.payload };
-    default:
-      return state;
-  }
-};
-
-const autocompleteSelect = (state = INITIAL_STATE.city, action = {}) => {
-  switch (action.type) {
     case ON_AUTOCOMPLETE_SELECTED:
       return { ...state, selected: action.payload };
     case ON_AUTOCOMPLETE_SELECTED_DATA:
-      return { ...state, data: action.payload };
+      // const cityObj = autocompleteCities.find(city => city.LocalizedName.toLowerCase() === action.payload.toLowerCase());
+      const cityObj = state.cities.find(city => city.LocalizedName.toLowerCase() === action.payload.toLowerCase());
+      return { ...state, city: cityObj };
     default:
       return state;
   }
@@ -86,8 +81,7 @@ const weatherForecast = (state = INITIAL_STATE.weatherForecast, action = {}) => 
 };
 
 export {
-  autocompleteSearch,
-  autocompleteSelect,
+  autocomplete,
   weatherConditions,
   weatherForecast
 }
