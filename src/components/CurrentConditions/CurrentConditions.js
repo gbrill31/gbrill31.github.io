@@ -1,8 +1,24 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { connect } from 'react-redux';
 import { Card, CardContent, Typography, CardMedia } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
 import './CurrentConditions.scss';
+
+
+import {
+  getCityCurrentConditions
+} from '../../containers/App/actions';
+
+const mapStateToProps = state => ({
+  currentConditions: state.weatherConditions.currentConditions
+});
+
+const mapDispathToProps = dispatch => ({
+  getCurrentConditions: city => dispatch(getCityCurrentConditions(city))
+});
+
+
 
 const useStyles = makeStyles(theme => ({
   card: {
@@ -21,15 +37,19 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-function CurrentConditions({ city, currentConditions }) {
+function CurrentConditions({ city, getCurrentConditions, currentConditions }) {
   const classes = useStyles();
+
+  useEffect(() => {
+    getCurrentConditions(city);
+  }, [getCurrentConditions, city]);
 
   const getTemprature = () => {
     const units = currentConditions.Temperature.Metric.Unit === 'C' ? 'celsius' : 'fahrenheit';
     return `${currentConditions.Temperature.Metric.Value}º (${units})`;
   }
 
-  return (
+  return currentConditions && (
     <div className="currentConditionsWrapper">
       <Card className={classes.card}>
         <CardMedia
@@ -55,4 +75,4 @@ function CurrentConditions({ city, currentConditions }) {
   )
 };
 
-export default CurrentConditions;
+export default connect(mapStateToProps, mapDispathToProps)(CurrentConditions);

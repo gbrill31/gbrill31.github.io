@@ -3,8 +3,13 @@ import {
   ON_AUTOCOMPLETE_SUCCESS,
   ON_AUTOCOMPLETE_FAILED,
   ON_AUTOCOMPLETE_SELECTED,
-  ON_SELECTED_CURRENT_CONDITIONS,
-  ON_SELECTED_CURRENT_FORECAST
+  ON_AUTOCOMPLETE_SELECTED_DATA,
+  ON_REQUEST_CURRENT_CONDITIONS_PENDING,
+  ON_REQUEST_CURRENT_CONDITIONS_SUCCESS,
+  ON_REQUEST_CURRENT_CONDITIONS_FAILED,
+  ON_REQUEST_FORECAST_PENDING,
+  ON_REQUEST_FORECAST_SUCCESS,
+  ON_REQUEST_FORECAST_FAILED
 
 } from './constants';
 
@@ -15,9 +20,18 @@ const INITIAL_STATE = {
     error: ''
   },
   city: {
-    selected: null,
+    selected: '',
+    data: null
+  },
+  weatherConditions: {
+    isPending: false,
     currentConditions: null,
-    forecast: []
+    error: ''
+  },
+  weatherForecast: {
+    isPending: false,
+    forecast: null,
+    error: ''
   }
 }
 
@@ -38,10 +52,34 @@ const autocompleteSelect = (state = INITIAL_STATE.city, action = {}) => {
   switch (action.type) {
     case ON_AUTOCOMPLETE_SELECTED:
       return { ...state, selected: action.payload };
-    case ON_SELECTED_CURRENT_CONDITIONS:
-      return { ...state, currentConditions: action.payload };
-    case ON_SELECTED_CURRENT_FORECAST:
-      return { ...state, forecast: action.payload };
+    case ON_AUTOCOMPLETE_SELECTED_DATA:
+      return { ...state, data: action.payload };
+    default:
+      return state;
+  }
+};
+
+const weatherConditions = (state = INITIAL_STATE.weatherConditions, action = {}) => {
+  switch (action.type) {
+    case ON_REQUEST_CURRENT_CONDITIONS_PENDING:
+      return { ...state, isPending: true };
+    case ON_REQUEST_CURRENT_CONDITIONS_SUCCESS:
+      return { ...state, currentConditions: action.payload, isPending: false };
+    case ON_REQUEST_CURRENT_CONDITIONS_FAILED:
+      return { ...state, error: action.payload, isPending: false };
+    default:
+      return state;
+  }
+};
+
+const weatherForecast = (state = INITIAL_STATE.weatherForecast, action = {}) => {
+  switch (action.type) {
+    case ON_REQUEST_FORECAST_PENDING:
+      return { ...state, isPending: true };
+    case ON_REQUEST_FORECAST_SUCCESS:
+      return { ...state, forecast: action.payload, isPending: false };
+    case ON_REQUEST_FORECAST_FAILED:
+      return { ...state, error: action.payload, isPending: false };
     default:
       return state;
   }
@@ -49,5 +87,7 @@ const autocompleteSelect = (state = INITIAL_STATE.city, action = {}) => {
 
 export {
   autocompleteSearch,
-  autocompleteSelect
+  autocompleteSelect,
+  weatherConditions,
+  weatherForecast
 }

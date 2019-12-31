@@ -8,8 +8,15 @@ import './index.scss';
 import App from './containers/App/App';
 import * as serviceWorker from './serviceWorker';
 
-import { autocompleteSearch, autocompleteSelect } from './containers/App/reducers';
-const rootReducer = combineReducers({ autocompleteSearch, autocompleteSelect });
+import {
+  autocompleteSearch,
+  autocompleteSelect,
+  weatherConditions,
+  weatherForecast
+} from './containers/App/reducers';
+const rootReducer = combineReducers({
+  autocompleteSearch, autocompleteSelect, weatherConditions, weatherForecast
+});
 const store = createStore(rootReducer, applyMiddleware(thunkMiddleware));
 
 ReactDOM.render(

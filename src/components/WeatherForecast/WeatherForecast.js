@@ -11,34 +11,33 @@ import './WeatherForecast.scss';
 
 import {
   searchCities,
-  setSlectedCity
+  setSlectedCityName
 } from '../../containers/App/actions';
 
 const mapStateToProps = state => ({
   isPending: state.autocompleteSearch.isPending,
   citiesFound: state.autocompleteSearch.cities,
   requestError: state.autocompleteSearch.error,
-  selectedCity: state.autocompleteSelect.selected,
-  currentConditions: state.autocompleteSelect.currentConditions,
-  forecast: state.autocompleteSelect.forecast
+  selectedCityName: state.autocompleteSelect.selected,
+  selectedCity: state.autocompleteSelect.data,
 });
 
 const mapDispathToProps = dispatch => ({
   autocompleteSearch: name => dispatch(searchCities(name)),
-  setForecastCity: city => dispatch(setSlectedCity(city))
+  setCityName: city => dispatch(setSlectedCityName(city))
 });
 
 function WeatherForecast({
   citiesFound, isPending, autocompleteSearch, requestError, selectedCity,
-  setForecastCity, currentConditions, forecast
+  setCityName, selectedCityName
 }) {
 
   useEffect(() => {
-    setForecastCity('Tel Aviv');
-    return () => {
-      setForecastCity('');
-    };
-  }, [setForecastCity]);
+    if (selectedCityName === '') {
+      setCityName('Tel Aviv');
+    }
+    return () => { };
+  }, [setCityName, selectedCity, selectedCityName]);
 
   return (
     <Fragment>
@@ -55,7 +54,7 @@ function WeatherForecast({
           noOptionsText="No cities found..."
           onChange={(event, city) => {
             if (city) {
-              setForecastCity(city);
+              setCityName(city);
               autocompleteSearch('');
             }
           }}
@@ -87,8 +86,8 @@ function WeatherForecast({
         {
           selectedCity && (
             <Paper elevation={0} variant="outlined" className="forcastWrapper">
-              <CurrentConditions city={selectedCity} currentConditions={currentConditions} />
-              <Forecast forecast={forecast} />
+              <CurrentConditions city={selectedCity} />
+              <Forecast city={selectedCity} />
             </Paper>
           )
         }
