@@ -1,6 +1,5 @@
 import React, { Fragment, useEffect, useState, useCallback } from 'react';
 import { connect } from 'react-redux';
-import { toast } from 'react-toastify';
 import Unsplash from 'unsplash-js';
 import {
   Container, Paper, Button
