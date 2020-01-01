@@ -3,7 +3,7 @@ import {
   ON_AUTOCOMPLETE_SUCCESS,
   ON_AUTOCOMPLETE_FAILED,
   ON_AUTOCOMPLETE_SELECTED,
-  ON_AUTOCOMPLETE_SELECTED_DATA,
+  ON_SET_SELECTED_CITY_DATA,
   ON_REQUEST_FORECAST_PENDING,
   ON_REQUEST_FORECAST_SUCCESS,
   ON_REQUEST_FORECAST_FAILED
@@ -12,6 +12,7 @@ import {
 import { config, apiRequests } from '../../api/weatherConfig';
 import autocompleteCities from '../../autocomplete.json';
 import forecast from '../../forecast.json';
+
 
 const requestCitySearch = async (name) => {
   // try {
@@ -83,10 +84,14 @@ const requestForecast = async (city, dispatch) => {
   // }
 
   /**For local use */
-  dispatch({
-    type: ON_REQUEST_FORECAST_SUCCESS,
-    payload: forecast
-  });
+  dispatch({ type: ON_REQUEST_FORECAST_PENDING });
+  setTimeout(() => {
+    dispatch({
+      type: ON_REQUEST_FORECAST_SUCCESS,
+      payload: forecast
+    });
+  }, 2000);
+
 }
 
 const setSelectedCity = async (name, dispatch) => {
@@ -97,7 +102,7 @@ const setSelectedCity = async (name, dispatch) => {
       payload: data
     });
     dispatch({
-      type: ON_AUTOCOMPLETE_SELECTED_DATA,
+      type: ON_SET_SELECTED_CITY_DATA,
       payload: name
     })
   } catch (err) {
@@ -123,6 +128,7 @@ const searchCities = name => (dispatch) => {
 const getCityForecast = city => (dispatch) => {
   requestForecast(city, dispatch);
 }
+
 
 export {
   searchCities,

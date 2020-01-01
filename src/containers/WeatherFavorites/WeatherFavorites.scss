@@ -1,10 +1,15 @@
-.favoritesWrapper{
-  display: flex;
-  flex-flow: row wrap;
-  margin-top: 35px;
+.favoritesContainer{
+  padding-top: 20px;
 
-  .favoriteWrapper{
-    border: 1px solid black;
-    margin: 10px 10px 10px 0;
-  }
+  .favoritesWrapper{
+    display: flex;
+    flex-flow: row wrap;
+    margin-top: 35px;
+
+    .favoriteWrapper{
+      // border: 1px solid black;
+      margin: 10px 10px 10px 0;
+    }
+}
+
 }

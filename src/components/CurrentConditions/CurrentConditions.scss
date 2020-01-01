@@ -1,4 +1,22 @@
-// .currentConditionsWrapper{
-//   display: flex;
-//   flex-wrap: wrap;
-// }
+.currentConditionsWrapper{
+  background-color: inherit;
+
+  .MuiPaper-root{
+   background-color: inherit;
+  }
+
+  .cityNameHeader{
+    @media (max-width: 600px) {
+      font-size: 2em;
+    }
+  }
+}
+
+.conditionsLoader{
+  // display: flex;
+  // justify-content: center;
+  // align-items: flex-start;
+  // height: 100%;
+  // width: 100%;
+  padding: 25px;
+}

@@ -1,0 +1,15 @@
+.navBtnTitle{
+  display: inherit;
+
+  @media (max-width: 600px) {
+    display: none;
+  }
+}
+.navBtnIcon{
+  margin-left: 10px;
+  transform: translate(0, 3px);
+
+  @media (max-width: 600px) {
+    margin: 0;
+  }
+}

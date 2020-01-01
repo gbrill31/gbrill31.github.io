@@ -38,6 +38,8 @@ function WeatherFavorites({
   useEffect(() => {
     loadFromFavorites();
 
+    return () => { }
+
   }, [loadFromFavorites]);
 
   const handleOpenPrompt = () => {
@@ -58,7 +60,7 @@ function WeatherFavorites({
   }
 
   return (
-    <Container maxWidth="xl">
+    <Container maxWidth="xl" className="favoritesContainer">
       <h1>Your Favorite Cities</h1>
       <Button
         variant="contained"
@@ -72,7 +74,10 @@ function WeatherFavorites({
           <div key={city.Key} className="favoriteWrapper">
             <Button
               onClick={() => handleFavoriteSelection(city)}
-              style={{ textTransform: 'none' }}
+              style={{
+                textTransform: 'none',
+                border: '1px solid black'
+              }}
             >
               <CurrentConditions city={city} />
             </Button>

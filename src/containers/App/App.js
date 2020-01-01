@@ -20,7 +20,7 @@ function App() {
     <div className="appRoot">
       <HeaderNav />
 
-      <main>
+      <main className="mainWrapper">
         <Switch>
           <Route exact path="/" component={WeatherForecast} />
           <Route exact path="/favorites" component={WeatherFavorites} />

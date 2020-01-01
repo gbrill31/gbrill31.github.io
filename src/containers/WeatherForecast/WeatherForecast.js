@@ -1,20 +1,19 @@
-import React, { Fragment, useEffect, useState } from 'react';
+import React, { Fragment, useEffect, useState, useCallback } from 'react';
 import { connect } from 'react-redux';
 import { toast } from 'react-toastify';
+import Unsplash from 'unsplash-js';
 import {
-  TextField, Container, CircularProgress, Paper, Button
+  Container, Paper, Button
 } from '@material-ui/core';
-import Autocomplete from '@material-ui/lab/Autocomplete';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 
-
+import SearchCitiesInput from '../../components/SearchCitiesInput/SearchCitiesInput';
 import CurrentConditions from '../../components/CurrentConditions/CurrentConditions';
 import Forecast from '../../components/Forecast/Forecast';
 
 import './WeatherForecast.scss';
 
 import {
-  searchCities,
   setSlectedCityName
 } from './actions';
 
@@ -22,111 +21,93 @@ import {
   saveFavorite
 } from '../WeatherFavorites/actions';
 
+const unsplash = new Unsplash({
+  accessKey: '07b05aadc071c805fe2fe28c70c0666509b1690d3b7d23cb080af1b2fa530899',
+  headers: {
+    'SameSite': 'none',
+    'Set-Cookie': 'promo_shown=1; Max- Age=2600000; Secure'
+  }
+});
+
 const mapStateToProps = state => ({
-  isPending: state.autocomplete.isPending,
-  citiesFound: state.autocomplete.cities,
-  searchError: state.autocomplete.error,
   selectedCityName: state.autocomplete.selected,
   selectedCity: state.autocomplete.city,
   favorites: state.weatherFavorites.items
 });
 
 const mapDispathToProps = dispatch => ({
-  autocompleteSearch: name => dispatch(searchCities(name)),
-  setCityName: city => dispatch(setSlectedCityName(city)),
-  saveToFavorites: city => dispatch(saveFavorite(city))
+  saveToFavorites: city => dispatch(saveFavorite(city)),
+  setCityName: city => dispatch(setSlectedCityName(city))
 });
 
 const DEFAULT_CITY = 'Tel Aviv';
 
 function WeatherForecast({
-  citiesFound, isPending, autocompleteSearch, searchError, selectedCity,
-  setCityName, selectedCityName, saveToFavorites, favorites
+  selectedCity, saveToFavorites, favorites, setCityName, selectedCityName
 }) {
-  const [searchInput, setSearchInput] = useState('');
-  const [isSearchInputError, setIsSearchInputError] = useState(false);
+
+  const [bgPhoto, setBgPhoto] = useState('');
+
+  const loadBgImage = ({ results }) => {
+    let path = require('../../images/default_bg.jpg');
+    if (results.length) {
+      path = results[0].urls.full;
+    }
+    const img = new Image();
+    img.onload = () => {
+      setBgPhoto(path);
+    }
+    img.src = path;
+  }
+
+  const setSelectedCity = useCallback((cityName) => {
+    setCityName(cityName);
+  }, [setCityName]);
 
   useEffect(() => {
-    if (selectedCityName === null) {
-      setCityName(DEFAULT_CITY);
-      autocompleteSearch(DEFAULT_CITY);
+    if (!selectedCityName) {
+      setSelectedCity(DEFAULT_CITY);
+    }
+  }, [selectedCityName, setSelectedCity]);
+
+  useEffect(() => {
+    if (selectedCity) {
+      unsplash.search.photos(selectedCity.LocalizedName, 1, 3, { orientation: "landscape" })
+        .then(res => res.json())
+        .then(data => {
+          loadBgImage(data);
+        });
     }
     return () => { };
-  }, [setCityName, selectedCity, selectedCityName, autocompleteSearch]);
-
-  useEffect(() => {
-    if (searchError) {
-      toast.error(searchError);
-    }
-
-  }, [searchError]);
+  }, [bgPhoto, selectedCity]);
 
   const isInFavorites = () => {
     const isSaved = typeof favorites.find(city => city.Key === selectedCity.Key) === 'object';
     return isSaved;
   }
 
-  const handleSearchChange = (event) => {
-    if (/^[a-zA-Z]*$/g.test(event.target.value)) {
-      setSearchInput(event.target.value);
-      autocompleteSearch(event.target.value);
-      setIsSearchInputError(false);
-    } else {
-      setIsSearchInputError(true);
-    }
-  }
-
 
   return (
     <Fragment>
-      <Container maxWidth="xl">
-        <Autocomplete
-          freeSolo
-          id="weather-autocomplete-search"
-          className="autocompleteField"
-          inputValue={searchInput}
-          options={citiesFound.map(city => city.LocalizedName)}
-          loading={isPending}
-          clearOnEscape
-          noOptionsText="No cities found..."
-          onFocus={() => {
-            autocompleteSearch('');
-          }}
-          onChange={(event, city) => {
-            if (city) {
-              setCityName(city);
-              autocompleteSearch('');
-            }
-          }}
-          renderInput={params => {
-            return (
-              <TextField
-                {...params}
-                label={`Search City ${isSearchInputError ? '(*English characters only)' : ''}`}
-                margin="normal"
-                variant="outlined"
-                error={isSearchInputError}
-                fullWidth
-                onChange={handleSearchChange}
-                InputProps={{
-                  ...params.InputProps,
-                  type: 'text',
-                  endAdornment: (
-                    <Fragment>
-                      {isPending ? <CircularProgress color="inherit" size={20} /> : null}
-                      {params.InputProps.endAdornment}
-                    </Fragment>
-                  )
-                }}
-              />
-            )
-          }}
+      <Container
+        maxWidth="xl"
+        className="forecastContainer"
+        style={{
+          backgroundImage: `url(${bgPhoto})`
+        }}
+      >
+        <SearchCitiesInput
+          setCityName={setSelectedCity}
         />
         {
           selectedCity && (
-            <Paper elevation={0} variant="outlined" className="forecastWrapper">
+            <Paper elevation={0} variant="outlined" className="forecastPaperWrapper">
               <div className="forecastHeader">
-                <CurrentConditions className="currentConditions" city={selectedCity} isInFavorites={isInFavorites()} />
+                <CurrentConditions
+                  className="justifyLeft"
+                  city={selectedCity}
+                  isInFavorites={isInFavorites()}
+                />
                 <Button
                   onClick={() => {
                     saveToFavorites(selectedCity);
@@ -136,7 +117,7 @@ function WeatherForecast({
                   disabled={isInFavorites()}
                   startIcon={<FavoriteIcon />}
                 >
-                  Save To Favorites
+                  Add To Favorites
                 </Button>
               </div>
               <Forecast city={selectedCity} />

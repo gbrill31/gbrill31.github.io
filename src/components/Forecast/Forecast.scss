@@ -1,31 +1,69 @@
 .forecastWrapper{
   margin: 30px;
+  min-height: 500px;
+
   @media (max-width: 700px) {
-    margin: 0;
+    margin: 15px 0 0 0;
+    min-height: auto;
+  }
+
+  .forecastHeaderText{
+    text-align: center;
+
+     @media (max-width: 700px) {
+       font-size: 1.2em;
+    }
   }
 
   .forecastDaysWrapper{
     display: flex;
     flex-wrap: wrap;
     margin-top: 50px;
+    padding: 30px;
     justify-content: center;
 
+     @media (max-width: 700px) {
+      flex-wrap: nowrap;
+      overflow-x: scroll;
+      justify-content: flex-start;
+      padding: 10px;
+      margin: 15px;
+    }
+
     .forecastDay{
-      min-width: 200px;
+      min-width: 250px;
       height: 100%;
       text-align: center;
-      margin: 0 5px;
+      margin: 5px;
       box-shadow: 1px 2px 5px rgba(0, 0, 0, 0.6);
       padding: 15px 5px;
+      background-color: #fff;
+      // background-color: rgba(0,0,0,0.7);
+      // color: #fff;
 
       @media (max-width: 700px) {
         flex-basis: 100%;
       }
+      @media (max-width: 1400px) {
+          min-width: 220px;
+      }
+
+      .forecastDayTemp{
+        margin: 1px;
+      }
 
       .dayIcon{
         width: 65px;
+        // filter: invert(1);
       }
     }
   }
   
 }
+
+ .forecastLoader{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 500px;
+  }

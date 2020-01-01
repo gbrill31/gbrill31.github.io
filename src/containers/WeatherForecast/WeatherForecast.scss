@@ -3,23 +3,44 @@
   margin: 0 auto;
 }
 
-.forecastWrapper{
-  // position: relative;
-  min-height: 100px;
-  margin-top: 15px;
+.forecastContainer{
+  background-repeat: no-repeat;
+  background-size: cover;
+  padding-bottom: 75px;
+  min-height: 100vh;
 
+
+  .forecastPaperWrapper{
+    min-height: 500px;
+    margin-top: 30px;
+    
+
+  &.MuiPaper-root{
+    background-color: rgba(255, 255, 255, 0.7);
+  }
+  
   .forecastHeader {
-    display: flex;
-    flex-flow: row wrap;
-    justify-content: space-between;
+      display: flex;
+      flex-flow: row wrap;
+      justify-content: space-between;
 
-    .currentConditions{
-      justify-self: flex-start;
-    }
-    .addToFavoritesBtn{
-      justify-self: flex-end;
-      margin: 15px 15px 0 0;
-      height: 45px;
+      @media (max-width: 600px) {
+        justify-content: center;
+      }
+
+      .justifyLeft{
+        justify-self: flex-start;
+      }
+      .addToFavoritesBtn{
+        justify-self: flex-end;
+        margin: 15px 15px 0 0;
+        height: 45px;
+
+          @media (max-width: 600px) {
+            margin: 0;
+          }
+      }
     }
   }
+  
 }

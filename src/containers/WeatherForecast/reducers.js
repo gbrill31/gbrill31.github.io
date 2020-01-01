@@ -3,7 +3,7 @@ import {
   ON_AUTOCOMPLETE_SUCCESS,
   ON_AUTOCOMPLETE_FAILED,
   ON_AUTOCOMPLETE_SELECTED,
-  ON_AUTOCOMPLETE_SELECTED_DATA,
+  ON_SET_SELECTED_CITY_DATA,
   ON_REQUEST_FORECAST_PENDING,
   ON_REQUEST_FORECAST_SUCCESS,
   ON_REQUEST_FORECAST_FAILED
@@ -37,7 +37,7 @@ const autocomplete = (state = INITIAL_STATE.search, action = {}) => {
       return { ...state, isPending: false, error: action.payload };
     case ON_AUTOCOMPLETE_SELECTED:
       return { ...state, selected: action.payload };
-    case ON_AUTOCOMPLETE_SELECTED_DATA:
+    case ON_SET_SELECTED_CITY_DATA:
       const cityObj = autocompleteCities.find(city => city.LocalizedName.toLowerCase() === action.payload.toLowerCase());
       // const cityObj = state.cities.find(city => city.LocalizedName.toLowerCase() === action.payload.toLowerCase());
       return { ...state, city: cityObj };
