@@ -74,6 +74,7 @@ function Forecast({
     </div>
   ) : (
       <div className="forecastLoader">
+        <h5>{`Loading ${city.LocalizedName} Weather Forecast ...`}</h5>
         <CircularProgress color="inherit" size={100} />
       </div>
     )

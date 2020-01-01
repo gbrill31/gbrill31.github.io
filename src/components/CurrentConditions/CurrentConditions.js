@@ -120,7 +120,7 @@ function CurrentConditions({
           </Card>
         ) : (
             <div className="conditionsLoader">
-              {`Loading ${city.LocalizedName} Weather Conditions...`}
+              <h5>{`Loading ${city.LocalizedName} Weather Conditions ...`}</h5>
               <LinearProgress color="secondary" style={{ width: '100%' }} />
             </div>
           )
