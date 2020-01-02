@@ -15,7 +15,7 @@ import {
   clearFavorite
 } from './actions';
 import {
-  setSlectedCityName
+  setSlectedCity
 } from '../WeatherForecast/actions';
 
 const mapStateToProps = state => ({
@@ -26,11 +26,11 @@ const mapStateToProps = state => ({
 const mapDispathToProps = dispatch => ({
   loadFromFavorites: () => dispatch(loadFavorites()),
   clearAllFavorites: () => dispatch(clearFavorite()),
-  setCityName: city => dispatch(setSlectedCityName(city))
+  setForecastCity: city => dispatch(setSlectedCity(city))
 });
 
 function WeatherFavorites({
-  loadFromFavorites, favorites, setCityName, clearAllFavorites
+  loadFromFavorites, favorites, setForecastCity, clearAllFavorites
 }) {
   const history = useHistory();
   const [isPrompt, setIsPrompt] = useState(false);
@@ -51,7 +51,7 @@ function WeatherFavorites({
   }
 
   const handleFavoriteSelection = (city) => {
-    setCityName(city.LocalizedName);
+    setForecastCity(city);
     history.push('/');
   }
 

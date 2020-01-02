@@ -11,13 +11,16 @@ import App from './containers/App/App';
 import * as serviceWorker from './serviceWorker';
 
 import {
-  autocomplete,
   weatherForecast
 } from './containers/WeatherForecast/reducers';
 
 import {
   weatherFavorites
 } from './containers/WeatherFavorites/reducers';
+
+import {
+  autocomplete,
+} from './containers/App/reducers';
 
 const rootReducer = combineReducers({
   autocomplete, weatherForecast, weatherFavorites

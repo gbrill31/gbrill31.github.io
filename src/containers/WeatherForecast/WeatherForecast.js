@@ -13,7 +13,7 @@ import Forecast from '../../components/Forecast/Forecast';
 import './WeatherForecast.scss';
 
 import {
-  setSlectedCityName
+  setSlectedCity
 } from './actions';
 
 import {
@@ -29,20 +29,19 @@ const unsplash = new Unsplash({
 });
 
 const mapStateToProps = state => ({
-  selectedCityName: state.autocomplete.selected,
-  selectedCity: state.autocomplete.city,
+  selectedCity: state.weatherForecast.city,
   favorites: state.weatherFavorites.items
 });
 
 const mapDispathToProps = dispatch => ({
   saveToFavorites: city => dispatch(saveFavorite(city)),
-  setCityName: city => dispatch(setSlectedCityName(city))
+  setForecastCity: city => dispatch(setSlectedCity(city))
 });
 
 const DEFAULT_CITY = 'Tel Aviv';
 
 function WeatherForecast({
-  selectedCity, saveToFavorites, favorites, setCityName, selectedCityName
+  selectedCity, saveToFavorites, favorites, setForecastCity
 }) {
 
   const [bgPhoto, setBgPhoto] = useState('');
@@ -59,15 +58,15 @@ function WeatherForecast({
     img.src = path;
   }
 
-  const setSelectedCity = useCallback((cityName) => {
-    setCityName(cityName);
-  }, [setCityName]);
+  const setSelectedCity = useCallback((city) => {
+    setForecastCity(city);
+  }, [setForecastCity]);
 
   useEffect(() => {
-    if (!selectedCityName) {
+    if (!selectedCity) {
       setSelectedCity(DEFAULT_CITY);
     }
-  }, [selectedCityName, setSelectedCity]);
+  }, [selectedCity, setSelectedCity]);
 
   useEffect(() => {
     if (selectedCity) {
@@ -96,7 +95,7 @@ function WeatherForecast({
         }}
       >
         <SearchCitiesInput
-          setCityName={setSelectedCity}
+          setSelectedCity={setSelectedCity}
         />
         {
           selectedCity && (

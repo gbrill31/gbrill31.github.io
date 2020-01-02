@@ -5,10 +5,9 @@ import {
 } from '@material-ui/core';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import { makeStyles } from '@material-ui/core/styles';
+import { requestCurrentConditions } from '../../weatherapi/weatherService';
 
 import './CurrentConditions.scss';
-import { config, apiRequests } from '../../api/weatherConfig';
-import selectedCurrentConditions from '../../currentWeather.json';
 
 
 const useStyles = makeStyles(theme => ({
@@ -41,44 +40,33 @@ function CurrentConditions({
 
   useEffect(() => {
     let isRequestCancelled = false;
-    const requestCurrentConditions = async () => {
-      // try {
-      //   setIsLoadingConditions(true);
-      //   const res = await fetch(`${apiRequests.currentConditions}${city.Key}?apikey=${config.key}`);
-      //   const data = await res.json();
-      //   if (!data.message && !isRequestCancelled) {
-      //     setCurrentConditions(data[0]);
-      //     setIsLoadingConditions(false);
-      //   } else if(!isRequestCancelled) {
-      //     toast.error(data.message, { autoClose: false });
-      //     setIsLoadingConditions(false);
-      //   }
-      // } catch (err) {
-      //    if (!isRequestCancelled) {
-      //      toast.error('No current weather conditions found', { autoClose: false });
-      //      setIsLoadingConditions(false);
-      //    }
-
-      // }
-
-      /**For local use */
-
-      setIsLoadingConditions(true);
-      setTimeout(() => {
+    const getCurrentConditions = async () => {
+      try {
+        setIsLoadingConditions(true);
+        const data = await requestCurrentConditions(city);
         if (!isRequestCancelled) {
-          setIsLoadingConditions(false);
-          setCurrentConditions(selectedCurrentConditions[0]);
+          if (!data.message) {
+            setCurrentConditions(data[0]);
+            setIsLoadingConditions(false);
+          } else {
+            toast.error(data.message, { autoClose: false });
+            setIsLoadingConditions(false);
+          }
         }
-      }, 2000);
+      } catch (err) {
+        if (!isRequestCancelled) {
+          toast.error('No current weather conditions found', { autoClose: false });
+          setIsLoadingConditions(false);
+        }
+      }
     };
-    if (!currentConditions) {
-      requestCurrentConditions();
-    }
+
+    getCurrentConditions();
 
     return () => {
       isRequestCancelled = true;
     }
-  }, [city, currentConditions]);
+  }, [city, city.Key]);
 
   const getTemprature = () => {
     const units = 'celsius';//currentConditions.Temperature.Metric.Unit === 'C' ? 'celsius' : 'fahrenheit';

@@ -8,7 +8,7 @@ import {
 
 import {
   searchCities
-} from '../../containers/WeatherForecast/actions';
+} from '../../containers/App/actions';
 
 const mapStateToProps = state => ({
   isSearchPending: state.autocomplete.isPending,
@@ -23,7 +23,7 @@ const mapDispathToProps = dispatch => ({
 
 function SearchCitiesInput({
   isSearchPending, citiesFound, searchError,
-  autocompleteSearch, setCityName
+  autocompleteSearch, setSelectedCity
 }) {
   const [searchInput, setSearchInput] = useState('');
   const [isSearchInputError, setIsSearchInputError] = useState(false);
@@ -45,6 +45,15 @@ function SearchCitiesInput({
     }
   }
 
+  const handleSearchSelection = (event, cityName) => {
+    if (cityName) {
+      const cityObj = citiesFound.find(city => city.LocalizedName.toLowerCase() === cityName.toLowerCase());
+      setSelectedCity(cityObj);
+      autocompleteSearch('');
+      setSearchInput('');
+    }
+  }
+
   return (
     <Autocomplete
       freeSolo
@@ -59,13 +68,7 @@ function SearchCitiesInput({
       onFocus={() => {
         autocompleteSearch('');
       }}
-      onChange={(event, city) => {
-        if (city) {
-          setCityName(city);
-          autocompleteSearch('');
-          setSearchInput('');
-        }
-      }}
+      onChange={handleSearchSelection}
       renderInput={params => {
         return (
           <TextField
