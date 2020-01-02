@@ -1,21 +1,21 @@
 import { config, apiRequests } from './weatherConfig';
-import autocompleteCities from '../autocomplete.json';
 
 /** For local use */
 // import forecast from '../forecast.json';
 // import selectedCurrentConditions from '../currentWeather.json';
+// import autocompleteCities from '../autocomplete.json';
 
 const requestCitySearch = async (cityName) => {
-  // try {
-  //   const res = await fetch(`${apiRequests.autocomplete}?apikey=${config.key}&q=${cityName}`);
-  //   const data = await res.json();
-  //   return data;
-  // } catch (err) {
-  //   return err;
-  // }
+  try {
+    const res = await fetch(`${apiRequests.autocomplete}?apikey=${config.key}&q=${cityName}`);
+    const data = await res.json();
+    return data;
+  } catch (err) {
+    return err;
+  }
 
   /**For local use */
-  return autocompleteCities.filter(city => city.LocalizedName.toLowerCase().includes(cityName.toLowerCase()));
+  // return autocompleteCities.filter(city => city.LocalizedName.toLowerCase().includes(cityName.toLowerCase()));
 };
 
 
