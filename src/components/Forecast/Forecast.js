@@ -14,8 +14,7 @@ import {
 const mapStateToProps = state => ({
   forecast: state.weatherForecast.forecast,
   isLoading: state.weatherForecast.isPending,
-  forecastError: state.weatherForecast.error,
-  units: state.tempratureUnits.units
+  forecastError: state.weatherForecast.error
 });
 
 const mapDispathToProps = dispatch => ({
@@ -24,7 +23,8 @@ const mapDispathToProps = dispatch => ({
 
 
 function Forecast({
-  city, forecast, getForecast, forecastError, isLoading, units
+  city, forecast, getForecast, forecastError, isLoading, units,
+  isDarkMode
 }) {
 
   const getCityForecast = useCallback((cityData) => {
@@ -58,12 +58,21 @@ function Forecast({
       <div className="forecastDaysWrapper">
         {
           forecast.DailyForecasts.map(item => (
-            <div className="forecastDay" key={item.EpochDate}>
+            <div
+              className="forecastDay"
+              key={item.EpochDate}
+              style={{
+                backgroundColor: isDarkMode ? '#888' : ''
+              }}
+            >
               <h3>{getDayOfTheWeek(item.Date)}</h3>
               <img
                 className="dayIcon"
                 src={require(`../../weatherIcons/${item.Day.Icon}.svg`)}
                 alt={item.IconPhrase}
+                style={{
+                  filter: isDarkMode ? 'invert(1)' : ''
+                }}
               />
               <h4>{item.Day.IconPhrase}</h4>
               <h5 className="forecastDayTemp">{`Low: ${item.Temperature.Minimum.Value}º`}</h5>

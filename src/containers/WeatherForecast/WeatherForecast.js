@@ -31,7 +31,8 @@ const unsplash = new Unsplash({
 const mapStateToProps = state => ({
   selectedCity: state.weatherForecast.city,
   favorites: state.weatherFavorites.items,
-  tempratureUnits: state.tempratureUnits.units
+  tempratureUnits: state.tempratureUnits.units,
+  isDarkMode: state.darkMode.isOn
 });
 
 const mapDispathToProps = dispatch => ({
@@ -42,7 +43,8 @@ const mapDispathToProps = dispatch => ({
 const DEFAULT_CITY = 'Tel Aviv';
 
 function WeatherForecast({
-  selectedCity, saveToFavorites, favorites, setForecastCity, tempratureUnits
+  selectedCity, saveToFavorites, favorites, setForecastCity, tempratureUnits,
+  isDarkMode
 }) {
 
   const [bgPhoto, setBgPhoto] = useState('');
@@ -97,22 +99,32 @@ function WeatherForecast({
       >
         <SearchCitiesInput
           setSelectedCity={setSelectedCity}
+          isDarkMode={isDarkMode}
         />
         {
           selectedCity && (
-            <Paper elevation={0} variant="outlined" className="forecastPaperWrapper">
+            <Paper
+              elevation={0}
+              variant="outlined"
+              className="forecastPaperWrapper"
+              style={{
+                backgroundColor: isDarkMode ? 'rgba(0,0,0,0.7)' : 'rgba(255,255,255,0.7)'
+              }}
+            >
               <div className="forecastHeader">
                 <CurrentConditions
                   className="justifyLeft"
                   city={selectedCity}
                   tempratureUnits={tempratureUnits}
                   isInFavorites={isInFavorites()}
+                  isDarkMode={isDarkMode}
                 />
                 <Button
                   onClick={() => {
                     saveToFavorites(selectedCity);
                   }}
                   variant="contained"
+                  color="secondary"
                   className="addToFavoritesBtn"
                   disabled={isInFavorites()}
                   startIcon={<FavoriteIcon />}
@@ -120,7 +132,11 @@ function WeatherForecast({
                   Add To Favorites
                 </Button>
               </div>
-              <Forecast city={selectedCity} />
+              <Forecast
+                city={selectedCity}
+                units={tempratureUnits}
+                isDarkMode={isDarkMode}
+              />
             </Paper>
           )
         }

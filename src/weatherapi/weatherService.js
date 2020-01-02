@@ -1,53 +1,53 @@
 import { config, apiRequests } from './weatherConfig';
 
 /** For local use */
-// import forecast from '../forecast.json';
-// import selectedCurrentConditions from '../currentWeather.json';
-// import autocompleteCities from '../autocomplete.json';
+import forecast from '../forecast.json';
+import selectedCurrentConditions from '../currentWeather.json';
+import autocompleteCities from '../autocomplete.json';
 
 const requestCitySearch = async (cityName) => {
-  try {
-    const res = await fetch(`${apiRequests.autocomplete}?apikey=${config.key}&q=${cityName}`);
-    const data = await res.json();
-    return data;
-  } catch (err) {
-    return err;
-  }
+  // try {
+  //   const res = await fetch(`${apiRequests.autocomplete}?apikey=${config.key}&q=${cityName}`);
+  //   const data = await res.json();
+  //   return data;
+  // } catch (err) {
+  //   return err;
+  // }
 
   /**For local use */
-  // return autocompleteCities.filter(city => city.LocalizedName.toLowerCase().includes(cityName.toLowerCase()));
+  return autocompleteCities.filter(city => city.LocalizedName.toLowerCase().includes(cityName.toLowerCase()));
 };
 
 
 const requestForecast = async (city, units) => {
-  try {
-    const res = await fetch(`${apiRequests.forecast}${city.Key}?apikey=${config.key}&metric=${units === 'C'}`);
-    const data = await res.json();
-    if (!data.message) {
-      return data;
-    } else {
-      return data.message;
-    }
-  } catch (err) {
-    return err;
-  }
+  // try {
+  //   const res = await fetch(`${apiRequests.forecast}${city.Key}?apikey=${config.key}&metric=${units === 'C'}`);
+  //   const data = await res.json();
+  //   if (!data.message) {
+  //     return data;
+  //   } else {
+  //     return data.message;
+  //   }
+  // } catch (err) {
+  //   return err;
+  // }
 
   /**For local use */
-  // return forecast;
+  return forecast;
 
 };
 
 const requestCurrentConditions = async (city) => {
-  try {
-    const res = await fetch(`${apiRequests.currentConditions}${city.Key}?apikey=${config.key}`);
-    const data = await res.json();
-    return data;
-  } catch (err) {
-    return err;
-  }
+  // try {
+  //   const res = await fetch(`${apiRequests.currentConditions}${city.Key}?apikey=${config.key}`);
+  //   const data = await res.json();
+  //   return data;
+  // } catch (err) {
+  //   return err;
+  // }
 
   /**For local use */
-  // return selectedCurrentConditions;
+  return selectedCurrentConditions;
 };
 
 export {

@@ -2,7 +2,8 @@ import {
   ON_AUTOCOMPLETE_PENDING,
   ON_AUTOCOMPLETE_SUCCESS,
   ON_AUTOCOMPLETE_FAILED,
-  ON_TEMPRATURE_UNITS_UPDATE
+  ON_TEMPRATURE_UNITS_UPDATE,
+  ON_DARK_MODE_UPDATE
 } from './constants';
 
 import { requestCitySearch } from '../../weatherapi/weatherService';
@@ -51,9 +52,17 @@ const setTempratureUnits = units => (dispatch) => {
   })
 }
 
+const setDarkMode = isOn => (dispatch) => {
+  dispatch({
+    type: ON_DARK_MODE_UPDATE,
+    payload: isOn
+  })
+}
+
 
 
 export {
   searchCities,
-  setTempratureUnits
+  setTempratureUnits,
+  setDarkMode
 };

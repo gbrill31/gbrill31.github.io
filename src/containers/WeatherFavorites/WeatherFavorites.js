@@ -21,7 +21,8 @@ import {
 const mapStateToProps = state => ({
   favorites: state.weatherFavorites.items,
   isSaved: state.weatherFavorites.isSaved,
-  tempratureUnits: state.tempratureUnits.units
+  tempratureUnits: state.tempratureUnits.units,
+  isDarkMode: state.darkMode.isOn
 });
 
 const mapDispathToProps = dispatch => ({
@@ -31,7 +32,8 @@ const mapDispathToProps = dispatch => ({
 });
 
 function WeatherFavorites({
-  loadFromFavorites, favorites, setForecastCity, clearAllFavorites, tempratureUnits
+  loadFromFavorites, favorites, setForecastCity, clearAllFavorites, tempratureUnits,
+  isDarkMode
 }) {
   const history = useHistory();
   const [isPrompt, setIsPrompt] = useState(false);
@@ -61,10 +63,23 @@ function WeatherFavorites({
   }
 
   return (
-    <Container maxWidth="xl" className="favoritesContainer">
-      <h1>Your Favorite Cities</h1>
+    <Container
+      maxWidth="xl"
+      className="favoritesContainer"
+      style={{
+        backgroundColor: isDarkMode ? '#333' : ''
+      }}
+    >
+      <h1
+        style={{
+          color: isDarkMode ? '#fff' : ''
+        }}
+      >
+        Your Favorite Cities
+      </h1>
       <Button
         variant="contained"
+        color="secondary"
         onClick={handleOpenPrompt}
         disabled={!hasFavorites()}
       >
@@ -72,7 +87,13 @@ function WeatherFavorites({
       </Button>
       <div className="favoritesWrapper">
         {hasFavorites() && favorites.map(city => (
-          <div key={city.Key} className="favoriteWrapper">
+          <div
+            key={city.Key}
+            className="favoriteWrapper"
+            style={{
+              backgroundColor: isDarkMode ? '#888' : ''
+            }}
+          >
             <Button
               onClick={() => handleFavoriteSelection(city)}
               style={{
@@ -80,7 +101,11 @@ function WeatherFavorites({
                 border: '1px solid black'
               }}
             >
-              <CurrentConditions city={city} tempratureUnits={tempratureUnits} />
+              <CurrentConditions
+                city={city}
+                tempratureUnits={tempratureUnits}
+                isDarkMode={isDarkMode}
+              />
             </Button>
           </div>
         ))}

@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Route, Switch } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { toast } from 'react-toastify';
+import { createMuiTheme } from '@material-ui/core/styles';
+import { ThemeProvider } from '@material-ui/styles';
 import 'react-toastify/dist/ReactToastify.css';
 import HeaderNav from '../../components/HeaderNav/HeaderNav';
 import WeatherForecast from '../WeatherForecast/WeatherForecast';
@@ -10,15 +12,18 @@ import WeatherFavorites from '../WeatherFavorites/WeatherFavorites';
 import './App.scss';
 
 import {
-  setTempratureUnits
+  setTempratureUnits,
+  setDarkMode
 } from './actions';
 
 const mapStateToProps = state => ({
-  units: state.tempratureUnits.units
+  units: state.tempratureUnits.units,
+  isDarkMode: state.darkMode.isOn
 });
 
 const mapDispathToProps = dispatch => ({
-  saveWeatherUnits: units => dispatch(setTempratureUnits(units))
+  saveWeatherUnits: units => dispatch(setTempratureUnits(units)),
+  setDarkModeState: isOn => dispatch(setDarkMode(isOn))
 });
 
 toast.configure({
@@ -28,23 +33,46 @@ toast.configure({
 });
 
 function App({
-  saveWeatherUnits, units
+  saveWeatherUnits, units, setDarkModeState, isDarkMode
 }) {
 
-  return (
-    <div className="appRoot">
-      <HeaderNav
-        saveWeatherUnits={saveWeatherUnits}
-        units={units}
-      />
 
-      <main className="mainWrapper">
-        <Switch>
-          <Route exact path="/" component={WeatherForecast} />
-          <Route exact path="/favorites" component={WeatherFavorites} />
-        </Switch>
-      </main>
-    </div>
+  const theme = createMuiTheme({
+    palette: {
+      type: isDarkMode ? 'dark' : 'light',
+      primary: {
+        main: '#272727',
+        dark: '#83af83',
+        light: '#e8e8e8',
+        contrastText: '#fff'
+      },
+      secondary: {
+        main: '#607d8b',
+        dark: '#83af83',
+        light: '#e8e8e8',
+        contrastText: '#fff'
+      }
+    }
+  });
+
+  return (
+    <ThemeProvider theme={theme}>
+      <div className="appRoot">
+        <HeaderNav
+          saveWeatherUnits={saveWeatherUnits}
+          units={units}
+          isDarkMode={isDarkMode}
+          setIsDarkMode={setDarkModeState}
+        />
+
+        <main className="mainWrapper">
+          <Switch>
+            <Route exact path="/" component={WeatherForecast} />
+            <Route exact path="/favorites" component={WeatherFavorites} />
+          </Switch>
+        </main>
+      </div>
+    </ThemeProvider>
   );
 }
 

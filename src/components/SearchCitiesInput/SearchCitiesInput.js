@@ -6,6 +6,8 @@ import {
   TextField, CircularProgress
 } from '@material-ui/core';
 
+import './SearchCitiesInput.scss';
+
 import {
   searchCities
 } from '../../containers/App/actions';
@@ -23,7 +25,7 @@ const mapDispathToProps = dispatch => ({
 
 function SearchCitiesInput({
   isSearchPending, citiesFound, searchError,
-  autocompleteSearch, setSelectedCity
+  autocompleteSearch, setSelectedCity, isDarkMode
 }) {
   const [searchInput, setSearchInput] = useState('');
   const [isSearchInputError, setIsSearchInputError] = useState(false);
@@ -64,30 +66,30 @@ function SearchCitiesInput({
       loading={isSearchPending}
       blurOnSelect
       clearOnEscape
+      disableClearable
       noOptionsText="No cities found..."
       onFocus={() => {
         autocompleteSearch('');
       }}
+      onBlur={() => setIsSearchInputError(false)}
       onChange={handleSearchSelection}
       renderInput={params => {
         return (
           <TextField
             {...params}
-            label={`
-                  Search City ${isSearchInputError ? '(*English characters only)' : ''}
-                `}
             style={{
-              backgroundColor: '#fff'
+              backgroundColor: isDarkMode ? 'rgba(0 ,0 ,0, 0.7)' : 'rgba(250 ,250 ,250, 0.7)'
             }}
+            label={`Search City ${isSearchInputError ? '(*English characters only)' : ''}`}
             margin="normal"
             variant="filled"
-            color="secondary"
+            // color="secondary"
             error={isSearchInputError}
             fullWidth
             onChange={handleSearchChange}
             InputProps={{
               ...params.InputProps,
-              type: 'text',
+              type: 'search',
               endAdornment: (
                 <Fragment>
                   {isSearchPending ? <CircularProgress color="inherit" size={20} /> : null}

@@ -2,7 +2,8 @@ import {
   ON_AUTOCOMPLETE_PENDING,
   ON_AUTOCOMPLETE_SUCCESS,
   ON_AUTOCOMPLETE_FAILED,
-  ON_TEMPRATURE_UNITS_UPDATE
+  ON_TEMPRATURE_UNITS_UPDATE,
+  ON_DARK_MODE_UPDATE
 } from './constants';
 
 // import autocompleteCities from '../../autocomplete.json';
@@ -15,6 +16,9 @@ const INITIAL_STATE = {
   },
   temprature: {
     units: 'C'
+  },
+  darkMode: {
+    isOn: false
   }
 }
 
@@ -40,7 +44,17 @@ const tempratureUnits = (state = INITIAL_STATE.temprature, action = {}) => {
   }
 };
 
+const darkMode = (state = INITIAL_STATE.darkMode, action = {}) => {
+  switch (action.type) {
+    case ON_DARK_MODE_UPDATE:
+      return { ...state, isOn: action.payload };
+    default:
+      return state;
+  }
+};
+
 export {
   autocomplete,
-  tempratureUnits
+  tempratureUnits,
+  darkMode
 }

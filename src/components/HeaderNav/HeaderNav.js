@@ -20,7 +20,7 @@ const useStyles = makeStyles(theme => ({
   },
   title: {
     flexGrow: 1,
-  },
+  }
 }));
 
 const navButtons = [
@@ -39,7 +39,7 @@ const navButtons = [
 ];
 
 function HeaderNav({
-  saveWeatherUnits, units
+  saveWeatherUnits, units, isDarkMode, setIsDarkMode
 }) {
   const classes = useStyles();
   const location = useLocation();
@@ -70,34 +70,42 @@ function HeaderNav({
           >
             <MenuIcon />
           </IconButton>
-          {
-            Boolean(anchorEl) ? (
-              <Menu
-                id="settings-menu"
-                getContentAnchorEl={null}
-                anchorOrigin={{
-                  vertical: 'bottom',
-                  horizontal: 'left'
-                }}
-                anchorEl={anchorEl}
-                keepMounted
-                open={Boolean(anchorEl)}
-                onClose={handleCloseMenu}
-              >
-                <MenuItem>
-                  Show Fahrenheit
+
+          <Menu
+            id="settings-menu"
+            getContentAnchorEl={null}
+            anchorOrigin={{
+              vertical: 'bottom',
+              horizontal: 'left'
+            }}
+            anchorEl={anchorEl}
+            keepMounted
+            open={Boolean(anchorEl)}
+            onClose={handleCloseMenu}
+          >
+            <MenuItem>
+              Fahrenheit
                   <Switch
-                    checked={units === 'F'}
-                    onChange={() => {
-                      saveWeatherUnits(getOpositeUnits());
-                    }}
-                    value="C"
-                    inputProps={{ 'aria-label': 'toggle fahrenheit' }}
-                  />
-                </MenuItem>
-              </Menu>
-            ) : null
-          }
+                checked={units === 'F'}
+                onChange={() => {
+                  saveWeatherUnits(getOpositeUnits());
+                }}
+                value="C"
+                inputProps={{ 'aria-label': 'toggle fahrenheit' }}
+              />
+            </MenuItem>
+            <MenuItem>
+              Dark Mode
+                  <Switch
+                checked={isDarkMode}
+                onChange={() => {
+                  setIsDarkMode(!isDarkMode);
+                }}
+                value="C"
+                inputProps={{ 'aria-label': 'toggle dark mode' }}
+              />
+            </MenuItem>
+          </Menu>
           <Typography variant="h6" className={classes.title}>
             Weather App
           </Typography>

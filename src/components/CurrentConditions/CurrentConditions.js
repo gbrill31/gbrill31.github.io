@@ -32,7 +32,7 @@ const useStyles = makeStyles(theme => ({
 
 
 function CurrentConditions({
-  city, isInFavorites, tempratureUnits
+  city, isInFavorites, tempratureUnits, isDarkMode
 }) {
   const classes = useStyles();
   const [currentConditions, setCurrentConditions] = useState(null);
@@ -84,6 +84,9 @@ function CurrentConditions({
               className={classes.cover}
               image={require(`../../weatherIcons/${currentConditions.WeatherIcon}.svg`)}
               title={currentConditions.WeatherText}
+              style={{
+                filter: isDarkMode ? 'invert(1)' : ''
+              }}
             />
             <div className={classes.details}>
               <CardContent className={classes.content}>
