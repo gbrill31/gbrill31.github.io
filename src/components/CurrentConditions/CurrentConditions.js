@@ -24,7 +24,8 @@ const useStyles = makeStyles(theme => ({
     padding: '16px 16px 0 0'
   },
   cover: {
-    width: 150
+    width: 120,
+    margin: '15px'
   }
 }));
 
