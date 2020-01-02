@@ -2,6 +2,7 @@ import {
   ON_AUTOCOMPLETE_PENDING,
   ON_AUTOCOMPLETE_SUCCESS,
   ON_AUTOCOMPLETE_FAILED,
+  ON_TEMPRATURE_UNITS_UPDATE
 } from './constants';
 
 import { requestCitySearch } from '../../weatherapi/weatherService';
@@ -43,8 +44,16 @@ const searchCities = name => (dispatch) => {
   autocompleteSearch(name, dispatch);
 };
 
+const setTempratureUnits = units => (dispatch) => {
+  dispatch({
+    type: ON_TEMPRATURE_UNITS_UPDATE,
+    payload: units
+  })
+}
+
 
 
 export {
-  searchCities
+  searchCities,
+  setTempratureUnits
 };

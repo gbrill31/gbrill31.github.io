@@ -20,7 +20,8 @@ import {
 
 const mapStateToProps = state => ({
   favorites: state.weatherFavorites.items,
-  isSaved: state.weatherFavorites.isSaved
+  isSaved: state.weatherFavorites.isSaved,
+  tempratureUnits: state.tempratureUnits.units
 });
 
 const mapDispathToProps = dispatch => ({
@@ -30,7 +31,7 @@ const mapDispathToProps = dispatch => ({
 });
 
 function WeatherFavorites({
-  loadFromFavorites, favorites, setForecastCity, clearAllFavorites
+  loadFromFavorites, favorites, setForecastCity, clearAllFavorites, tempratureUnits
 }) {
   const history = useHistory();
   const [isPrompt, setIsPrompt] = useState(false);
@@ -79,7 +80,7 @@ function WeatherFavorites({
                 border: '1px solid black'
               }}
             >
-              <CurrentConditions city={city} />
+              <CurrentConditions city={city} tempratureUnits={tempratureUnits} />
             </Button>
           </div>
         ))}

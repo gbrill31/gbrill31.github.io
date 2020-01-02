@@ -15,20 +15,21 @@ const mapStateToProps = state => ({
   forecast: state.weatherForecast.forecast,
   isLoading: state.weatherForecast.isPending,
   forecastError: state.weatherForecast.error,
+  units: state.tempratureUnits.units
 });
 
 const mapDispathToProps = dispatch => ({
-  getForecast: city => dispatch(getCityForecast(city))
+  getForecast: (city, units) => dispatch(getCityForecast(city, units))
 });
 
 
 function Forecast({
-  city, forecast, getForecast, forecastError, isLoading
+  city, forecast, getForecast, forecastError, isLoading, units
 }) {
 
   const getCityForecast = useCallback((cityData) => {
-    getForecast(cityData);
-  }, [getForecast]);
+    getForecast(cityData, units);
+  }, [getForecast, units]);
 
   useEffect(() => {
     getCityForecast(city);

@@ -20,10 +20,11 @@ import {
 
 import {
   autocomplete,
+  tempratureUnits
 } from './containers/App/reducers';
 
 const rootReducer = combineReducers({
-  autocomplete, weatherForecast, weatherFavorites
+  autocomplete, weatherForecast, weatherFavorites, tempratureUnits
 });
 const store = createStore(rootReducer, applyMiddleware(thunkMiddleware));
 

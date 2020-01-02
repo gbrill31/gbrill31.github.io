@@ -8,10 +8,10 @@ import {
 import { requestCitySearch, requestForecast } from '../../weatherapi/weatherService';
 
 
-const getForecast = async (city, dispatch) => {
+const getForecast = async (city, units, dispatch) => {
   dispatch({ type: ON_REQUEST_FORECAST_PENDING });
   try {
-    const forecast = await requestForecast(city);
+    const forecast = await requestForecast(city, units);
     dispatch({
       type: ON_REQUEST_FORECAST_SUCCESS,
       payload: forecast
@@ -47,8 +47,8 @@ const setSlectedCity = city => (dispatch) => {
   setSelectedCity(city, dispatch);
 }
 
-const getCityForecast = city => (dispatch) => {
-  getForecast(city, dispatch);
+const getCityForecast = (city, units) => (dispatch) => {
+  getForecast(city, units, dispatch);
 }
 
 

@@ -1,7 +1,8 @@
 import {
   ON_AUTOCOMPLETE_PENDING,
   ON_AUTOCOMPLETE_SUCCESS,
-  ON_AUTOCOMPLETE_FAILED
+  ON_AUTOCOMPLETE_FAILED,
+  ON_TEMPRATURE_UNITS_UPDATE
 } from './constants';
 
 // import autocompleteCities from '../../autocomplete.json';
@@ -11,6 +12,9 @@ const INITIAL_STATE = {
     isPending: false,
     cities: [],
     error: null
+  },
+  temprature: {
+    units: 'C'
   }
 }
 
@@ -27,6 +31,16 @@ const autocomplete = (state = INITIAL_STATE.search, action = {}) => {
   }
 };
 
+const tempratureUnits = (state = INITIAL_STATE.temprature, action = {}) => {
+  switch (action.type) {
+    case ON_TEMPRATURE_UNITS_UPDATE:
+      return { ...state, units: action.payload };
+    default:
+      return state;
+  }
+};
+
 export {
-  autocomplete
+  autocomplete,
+  tempratureUnits
 }

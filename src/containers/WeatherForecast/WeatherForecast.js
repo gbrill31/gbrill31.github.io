@@ -30,7 +30,8 @@ const unsplash = new Unsplash({
 
 const mapStateToProps = state => ({
   selectedCity: state.weatherForecast.city,
-  favorites: state.weatherFavorites.items
+  favorites: state.weatherFavorites.items,
+  tempratureUnits: state.tempratureUnits.units
 });
 
 const mapDispathToProps = dispatch => ({
@@ -41,7 +42,7 @@ const mapDispathToProps = dispatch => ({
 const DEFAULT_CITY = 'Tel Aviv';
 
 function WeatherForecast({
-  selectedCity, saveToFavorites, favorites, setForecastCity
+  selectedCity, saveToFavorites, favorites, setForecastCity, tempratureUnits
 }) {
 
   const [bgPhoto, setBgPhoto] = useState('');
@@ -104,6 +105,7 @@ function WeatherForecast({
                 <CurrentConditions
                   className="justifyLeft"
                   city={selectedCity}
+                  tempratureUnits={tempratureUnits}
                   isInFavorites={isInFavorites()}
                 />
                 <Button

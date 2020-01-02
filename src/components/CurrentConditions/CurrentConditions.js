@@ -31,7 +31,7 @@ const useStyles = makeStyles(theme => ({
 
 
 function CurrentConditions({
-  city, isInFavorites
+  city, isInFavorites, tempratureUnits
 }) {
   const classes = useStyles();
   const [currentConditions, setCurrentConditions] = useState(null);
@@ -69,8 +69,8 @@ function CurrentConditions({
   }, [city, city.Key]);
 
   const getTemprature = () => {
-    const units = 'celsius';//currentConditions.Temperature.Metric.Unit === 'C' ? 'celsius' : 'fahrenheit';
-    return `${currentConditions.Temperature.Metric.Value}º (${units})`;
+    const isCelsuis = tempratureUnits === 'C';
+    return `${currentConditions.Temperature[isCelsuis ? 'Metric' : 'Imperial'].Value}º (${tempratureUnits})`;
   }
 
   return (
