@@ -1,5 +1,3 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
-
 ## Herolo Weather App
 
 In this project you can find any city in the world via AcuWeather.
