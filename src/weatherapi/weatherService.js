@@ -1,7 +1,9 @@
 import { config, apiRequests } from './weatherConfig';
 import autocompleteCities from '../autocomplete.json';
-import forecast from '../forecast.json';
-import selectedCurrentConditions from '../currentWeather.json';
+
+/** For local use */
+// import forecast from '../forecast.json';
+// import selectedCurrentConditions from '../currentWeather.json';
 
 const requestCitySearch = async (cityName) => {
   // try {
