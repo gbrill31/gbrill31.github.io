@@ -18,7 +18,8 @@
     "react-toastify": "^5.5.0",
     "redux": "^4.0.5",
     "redux-thunk": "^2.3.0",
-    "unsplash-js": "^6.0.0"
+    "unsplash-js": "^6.0.0",
+    "node-sass": "^4.13.0"
   },
   "scripts": {
     "start": "cross-env react-scripts start",
@@ -43,7 +44,6 @@
     ]
   },
   "devDependencies": {
-    "gh-pages": "^2.1.1",
-    "node-sass": "^4.13.0"
+    "gh-pages": "^2.1.1"
   }
 }
