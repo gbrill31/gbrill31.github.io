@@ -12,10 +12,18 @@ const getForecast = async (city, units, dispatch) => {
   dispatch({ type: ON_REQUEST_FORECAST_PENDING });
   try {
     const forecast = await requestForecast(city, units);
-    dispatch({
-      type: ON_REQUEST_FORECAST_SUCCESS,
-      payload: forecast
-    });
+    if (!forecast.message) {
+      dispatch({
+        type: ON_REQUEST_FORECAST_SUCCESS,
+        payload: forecast
+      });
+    } else {
+      dispatch({
+        type: ON_REQUEST_FORECAST_FAILED,
+        payload: forecast.message
+      });
+    }
+
   } catch (err) {
     dispatch({
       type: ON_REQUEST_FORECAST_FAILED,

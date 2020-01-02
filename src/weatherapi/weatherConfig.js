@@ -1,11 +1,11 @@
 const config = {
-  key: 'sIfMCNrPZ9hB8PaVHyMlfvwNVPcWfDcH'
+  key: 'X8fvVKhnIgUmB5BwKb8Qdos9MEPC22Kc'
 };
 
 const apiRequests = {
-  autocomplete: `http://dataservice.accuweather.com/locations/v1/cities/autocomplete`, //?apikey&q=city key
-  currentConditions: `http://dataservice.accuweather.com/currentconditions/v1/`, //city key?apikey
-  forecast: `http://dataservice.accuweather.com/forecasts/v1/daily/5day/` //city key?apikey&metric=true
+  autocomplete: `https://dataservice.accuweather.com/locations/v1/cities/autocomplete`, //?apikey&q=city key
+  currentConditions: `https://dataservice.accuweather.com/currentconditions/v1/`, //city key?apikey
+  forecast: `https://dataservice.accuweather.com/forecasts/v1/daily/5day/` //city key?apikey&metric=true
 };
 
 export {

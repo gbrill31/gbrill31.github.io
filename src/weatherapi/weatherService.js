@@ -1,9 +1,10 @@
 import { config, apiRequests } from './weatherConfig';
 
-/** For local use */
-// import forecast from '../forecast.json';
-// import selectedCurrentConditions from '../currentWeather.json';
-// import autocompleteCities from '../autocomplete.json';
+/** For local use 
+import forecast from '../forecast.json';
+import selectedCurrentConditions from '../currentWeather.json';
+import autocompleteCities from '../autocomplete.json';
+*/
 
 const requestCitySearch = async (cityName) => {
   try {
@@ -14,8 +15,9 @@ const requestCitySearch = async (cityName) => {
     return err;
   }
 
-  /**For local use */
-  // return autocompleteCities.filter(city => city.LocalizedName.toLowerCase().includes(cityName.toLowerCase()));
+  /**For local use 
+    return autocompleteCities.filter(city => city.LocalizedName.toLowerCase().includes(cityName.toLowerCase()));
+  */
 };
 
 
@@ -23,31 +25,29 @@ const requestForecast = async (city, units) => {
   try {
     const res = await fetch(`${apiRequests.forecast}${city.Key}?apikey=${config.key}&metric=${units === 'C'}`);
     const data = await res.json();
-    if (!data.message) {
-      return data;
-    } else {
-      return data.message;
-    }
+    return data;
   } catch (err) {
     return err;
   }
 
-  /**For local use */
-  // return forecast;
+  /**For local use 
+    return forecast;
+  */
 
 };
 
 const requestCurrentConditions = async (city) => {
   try {
-    const res = await fetch(`${apiRequests.currentConditions}${city.Key}?apikey=${config.key}`);
+    const res = await fetch(`${apiRequests.currentConditions}${city.Key}?apikey=${config.key}`)
     const data = await res.json();
     return data;
   } catch (err) {
     return err;
   }
 
-  /**For local use */
-  // return selectedCurrentConditions;
+  /**For local use 
+    return selectedCurrentConditions;
+  */
 };
 
 export {
