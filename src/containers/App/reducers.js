@@ -6,8 +6,6 @@ import {
   ON_DARK_MODE_UPDATE
 } from './constants';
 
-// import autocompleteCities from '../../autocomplete.json';
-
 const INITIAL_STATE = {
   search: {
     isPending: false,

@@ -6,8 +6,6 @@ import {
 
 } from './constants';
 
-// import autocompleteCities from '../../autocomplete.json';
-
 const INITIAL_STATE = {
   weatherForecast: {
     isPending: false,
