@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Route, Switch } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { toast } from 'react-toastify';
@@ -35,7 +35,6 @@ toast.configure({
 function App({
   saveWeatherUnits, units, setDarkModeState, isDarkMode
 }) {
-
 
   const theme = createMuiTheme({
     palette: {

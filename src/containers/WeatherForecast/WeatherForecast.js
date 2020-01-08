@@ -6,9 +6,12 @@ import {
 } from '@material-ui/core';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 
+import { useGeolocation } from '../../hooks/useGeolocation';
 import SearchCitiesInput from '../../components/SearchCitiesInput/SearchCitiesInput';
 import CurrentConditions from '../../components/CurrentConditions/CurrentConditions';
 import Forecast from '../../components/Forecast/Forecast';
+
+import { requestGeoLocation } from '../../weatherapi/weatherService';
 
 import './WeatherForecast.scss';
 
@@ -19,11 +22,12 @@ import {
 import {
   saveFavorite
 } from '../WeatherFavorites/actions';
+import { toast } from 'react-toastify';
 
 const unsplash = new Unsplash({
   accessKey: '07b05aadc071c805fe2fe28c70c0666509b1690d3b7d23cb080af1b2fa530899',
   headers: {
-    'SameSite': 'none',
+    'SameSite': 'None',
     'Set-Cookie': 'promo_shown=1; Max- Age=2600000; Secure'
   }
 });
@@ -47,29 +51,47 @@ function WeatherForecast({
   isDarkMode
 }) {
 
-  const [bgPhoto, setBgPhoto] = useState('');
+  const [bgPhoto, setBgPhoto] = useState('../../images/default_bg.jpg');
+  const { latitude, longitude, geoError } = useGeolocation();
 
-  const loadBgImage = ({ results }) => {
-    let path = require('../../images/default_bg.jpg');
+  const loadBgImage = useCallback(({ results }) => {
     if (results.length) {
-      path = results[0].urls.full;
+      const path = results[0].urls.full;
+      if (path !== bgPhoto) {
+        const img = new Image();
+        img.onload = () => {
+          setBgPhoto(path);
+        }
+        img.src = path;
+      }
     }
-    const img = new Image();
-    img.onload = () => {
-      setBgPhoto(path);
-    }
-    img.src = path;
-  }
+  }, [bgPhoto]);
 
   const setSelectedCity = useCallback((city) => {
     setForecastCity(city);
   }, [setForecastCity]);
 
   useEffect(() => {
-    if (!selectedCity) {
-      setSelectedCity(DEFAULT_CITY);
+    let isRequestCancelled = false;
+    const getCityByGeolocation = async () => {
+      try {
+        const city = await requestGeoLocation(latitude, longitude);
+        if (!isRequestCancelled) {
+          setSelectedCity(city);
+        }
+      } catch (err) {
+        toast.error(err, { autoClose: false });
+      }
     }
-  }, [selectedCity, setSelectedCity]);
+
+    if (!selectedCity) {
+      !geoError ? getCityByGeolocation() : setSelectedCity(DEFAULT_CITY);
+    }
+
+    return () => {
+      isRequestCancelled = true;
+    }
+  }, [geoError, latitude, longitude, selectedCity, setSelectedCity]);
 
   useEffect(() => {
     if (selectedCity) {
@@ -79,8 +101,9 @@ function WeatherForecast({
           loadBgImage(data);
         });
     }
+
     return () => { };
-  }, [bgPhoto, selectedCity]);
+  }, [loadBgImage, selectedCity]);
 
   const isInFavorites = () => {
     const isSaved = typeof favorites.find(city => city.Key === selectedCity.Key) === 'object';
