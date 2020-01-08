@@ -2,9 +2,10 @@ import React, { Fragment, useEffect, useState, useCallback } from 'react';
 import { connect } from 'react-redux';
 import Unsplash from 'unsplash-js';
 import {
-  Container, Paper, Button
+  Container, Paper, Button, Fab
 } from '@material-ui/core';
 import FavoriteIcon from '@material-ui/icons/Favorite';
+import MyLocationIcon from '@material-ui/icons/MyLocation';
 
 import { useGeolocation } from '../../hooks/useGeolocation';
 import SearchCitiesInput from '../../components/SearchCitiesInput/SearchCitiesInput';
@@ -67,13 +68,16 @@ function WeatherForecast({
     }
   }, [bgPhoto]);
 
+
+
+
   const setSelectedCity = useCallback((city) => {
     setForecastCity(city);
   }, [setForecastCity]);
 
   useEffect(() => {
     let isRequestCancelled = false;
-    const getCityByGeolocation = async () => {
+    const getGeolocationCity = async () => {
       try {
         const city = await requestGeoLocation(latitude, longitude);
         if (!isRequestCancelled) {
@@ -85,7 +89,7 @@ function WeatherForecast({
     }
 
     if (!selectedCity) {
-      !geoError ? getCityByGeolocation() : setSelectedCity(DEFAULT_CITY);
+      !geoError ? getGeolocationCity() : setSelectedCity(DEFAULT_CITY);
     }
 
     return () => {
@@ -120,10 +124,30 @@ function WeatherForecast({
           backgroundImage: `url(${bgPhoto})`
         }}
       >
-        <SearchCitiesInput
-          setSelectedCity={setSelectedCity}
-          isDarkMode={isDarkMode}
-        />
+        <div className="forecastSearch">
+          <SearchCitiesInput
+            setSelectedCity={setSelectedCity}
+            isDarkMode={isDarkMode}
+          />
+          <Fab
+            color="secondary"
+            aria-label="current location"
+            size="medium"
+            onClick={async () => {
+              try {
+                const city = await requestGeoLocation(latitude, longitude);
+                setSelectedCity(city);
+              } catch (err) {
+                toast.error(err, { autoClose: false });
+              }
+            }}
+            style={{
+              transform: 'translate(0, 3px)'
+            }}
+          >
+            <MyLocationIcon />
+          </Fab>
+        </div>
         {
           selectedCity && (
             <Paper

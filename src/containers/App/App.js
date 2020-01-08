@@ -41,13 +41,13 @@ function App({
       type: isDarkMode ? 'dark' : 'light',
       primary: {
         main: '#272727',
-        dark: '#83af83',
+        dark: '#09608e',
         light: '#e8e8e8',
         contrastText: '#fff'
       },
       secondary: {
         main: '#607d8b',
-        dark: '#83af83',
+        dark: '#09608e',
         light: '#e8e8e8',
         contrastText: '#fff'
       }
