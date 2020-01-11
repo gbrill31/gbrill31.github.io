@@ -67,9 +67,6 @@ function WeatherForecast({
     img.src = path;
   }, []);
 
-
-
-
   const setSelectedCity = useCallback((city) => {
     setForecastCity(city);
   }, [setForecastCity]);
