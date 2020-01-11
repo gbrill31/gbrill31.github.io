@@ -52,21 +52,20 @@ function WeatherForecast({
   isDarkMode
 }) {
 
-  const [bgPhoto, setBgPhoto] = useState('../../images/default_bg.jpg');
+  const [bgPhoto, setBgPhoto] = useState('');
   const { latitude, longitude, geoError } = useGeolocation();
 
   const loadBgImage = useCallback(({ results }) => {
+    let path = require('../../images/default_bg.jpg');
     if (results.length) {
-      const path = results[0].urls.full;
-      if (path !== bgPhoto) {
-        const img = new Image();
-        img.onload = () => {
-          setBgPhoto(path);
-        }
-        img.src = path;
-      }
+      path = results[0].urls.full;
     }
-  }, [bgPhoto]);
+    const img = new Image();
+    img.onload = () => {
+      setBgPhoto(path);
+    }
+    img.src = path;
+  }, []);
 
 
 
@@ -103,7 +102,8 @@ function WeatherForecast({
         .then(res => res.json())
         .then(data => {
           loadBgImage(data);
-        });
+        })
+        .catch(err => console.log(err));
     }
 
     return () => { };
