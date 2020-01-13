@@ -18,7 +18,7 @@ const mapStateToProps = state => ({
   searchError: state.autocomplete.error,
 });
 
-const mapDispathToProps = dispatch => ({
+const mapDispatchToProps = dispatch => ({
   autocompleteSearch: name => dispatch(searchCities(name))
 });
 
@@ -38,7 +38,7 @@ function SearchCitiesInput({
   }, [searchError]);
 
   const handleSearchChange = (event) => {
-    if (/^[a-zA-Z]*$/g.test(event.target.value)) {
+    if (/^[a-zA-Z_ ]*$/g.test(event.target.value)) {
       setSearchInput(event.target.value);
       autocompleteSearch(event.target.value);
       setIsSearchInputError(false);
@@ -104,4 +104,4 @@ function SearchCitiesInput({
   )
 }
 
-export default connect(mapStateToProps, mapDispathToProps)(SearchCitiesInput);
+export default connect(mapStateToProps, mapDispatchToProps)(SearchCitiesInput);

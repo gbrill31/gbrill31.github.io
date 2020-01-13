@@ -77,21 +77,28 @@ function WeatherForecast({
       try {
         const city = await requestGeoLocation(latitude, longitude);
         if (!isRequestCancelled) {
-          setSelectedCity(city);
+          if (!city.message && !city.Message) {
+            setSelectedCity(city);
+          } else {
+            setSelectedCity(DEFAULT_CITY);
+            toast.error('Could not find city by geo location', { autoClose: false });
+          }
+
         }
       } catch (err) {
+        setSelectedCity(DEFAULT_CITY);
         toast.error(err, { autoClose: false });
       }
     }
-
-    if (!selectedCity) {
-      !geoError ? getGeolocationCity() : setSelectedCity(DEFAULT_CITY);
+    if (!geoError && latitude && longitude) {
+      console.log('selected geo');
     }
+    getGeolocationCity();
 
     return () => {
       isRequestCancelled = true;
     }
-  }, [geoError, latitude, longitude, selectedCity, setSelectedCity]);
+  }, [geoError, latitude, longitude, setSelectedCity]);
 
   useEffect(() => {
     if (selectedCity) {

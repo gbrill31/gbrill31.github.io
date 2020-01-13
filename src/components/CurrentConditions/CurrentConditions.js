@@ -46,11 +46,11 @@ function CurrentConditions({
         setIsLoadingConditions(true);
         const data = await requestCurrentConditions(city);
         if (!isRequestCancelled) {
-          if (!data.message) {
+          if (!data.message && !data.Message) {
             setCurrentConditions(data[0]);
             setIsLoadingConditions(false);
           } else {
-            toast.error(data.message, { autoClose: false });
+            toast.error('Current weather conditions not found', { autoClose: false });
             setIsLoadingConditions(false);
           }
         }

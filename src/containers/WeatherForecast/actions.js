@@ -12,7 +12,7 @@ const getForecast = async (city, units, dispatch) => {
   dispatch({ type: ON_REQUEST_FORECAST_PENDING });
   try {
     const forecast = await requestForecast(city, units);
-    if (!forecast.message) {
+    if (!forecast.message && !forecast.Message) {
       dispatch({
         type: ON_REQUEST_FORECAST_SUCCESS,
         payload: forecast
@@ -20,7 +20,7 @@ const getForecast = async (city, units, dispatch) => {
     } else {
       dispatch({
         type: ON_REQUEST_FORECAST_FAILED,
-        payload: forecast.message
+        payload: 'Could not find weather forecast'
       });
     }
 
