@@ -14,7 +14,7 @@ const autocompleteSearch = async (cityName, dispatch) => {
     dispatch({ type: ON_AUTOCOMPLETE_PENDING });
     try {
       const data = await requestCitySearch(cityName);
-      if (!data.message) {
+      if (!data.message && !data.Message) {
         dispatch({
           type: ON_AUTOCOMPLETE_SUCCESS,
           payload: data
@@ -22,7 +22,7 @@ const autocompleteSearch = async (cityName, dispatch) => {
       } else {
         dispatch({
           type: ON_AUTOCOMPLETE_FAILED,
-          payload: data.message
+          payload: 'Could not find search results'
         });
       }
 
