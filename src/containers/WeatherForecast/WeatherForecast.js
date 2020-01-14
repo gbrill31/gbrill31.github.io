@@ -81,7 +81,7 @@ function WeatherForecast({
             setSelectedCity(city);
           } else {
             setSelectedCity(DEFAULT_CITY);
-            toast.error('Could not find city by geo location', { autoClose: false });
+            toast.error('Could not find city by geo location');
           }
 
         }
@@ -89,9 +89,6 @@ function WeatherForecast({
         setSelectedCity(DEFAULT_CITY);
         toast.error(err, { autoClose: false });
       }
-    }
-    if (!geoError && latitude && longitude) {
-      console.log('selected geo');
     }
     getGeolocationCity();
 
