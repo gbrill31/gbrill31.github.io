@@ -1,6 +1,5 @@
 import React, { useEffect, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { toast } from "react-toastify";
 import { Typography, CircularProgress } from "@material-ui/core";
 
 import "./Forecast.scss";
@@ -10,11 +9,9 @@ import { getCityForecast } from "../../actions";
 function Forecast({ city, units, isDarkMode }) {
   const dispatch = useDispatch();
 
-  const {
-    data: forecast,
-    isPending: isLoading,
-    error: forecastError,
-  } = useSelector((state) => state.forecast);
+  const { data: forecast, isPending: isLoading } = useSelector(
+    (state) => state.forecast
+  );
 
   const getForecast = useCallback(
     (city, units) => dispatch(getCityForecast(city, units)),
@@ -26,12 +23,6 @@ function Forecast({ city, units, isDarkMode }) {
 
     return () => {};
   }, [getForecast, city]);
-
-  useEffect(() => {
-    if (forecastError) {
-      toast.error(forecastError, { autoClose: false });
-    }
-  }, [forecastError]);
 
   const getDayOfTheWeek = (date) => {
     const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];

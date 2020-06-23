@@ -8,12 +8,21 @@ router.get("/autocomplete", (req, res) => {
     .get(
       `${weatherAPI.autocomplete}?apikey=${process.env.WEATHER_KEY}&q=${city}`
     )
-    .then(({ data }) => {
-      res.json(data).status(200);
-    })
-    .catch((err) => {
-      res.sendStatus(403);
-    });
+    .then(
+      ({ data }) => {
+        res.json(data).status(200);
+      },
+      (err) => {
+        res.header(
+          "notification",
+          JSON.stringify({
+            type: "error",
+            message: "Could Not Load Cities From Autocomplete",
+          })
+        );
+        res.status(err.response.status).json(err);
+      }
+    );
 });
 
 router.get("/conditions", (req, res) => {
@@ -22,12 +31,21 @@ router.get("/conditions", (req, res) => {
     .get(
       `${weatherAPI.currentConditions}${citykey}?apikey=${process.env.WEATHER_KEY}`
     )
-    .then(({ data }) => {
-      res.json(data).status(200);
-    })
-    .catch((err) => {
-      res.sendStatus(403);
-    });
+    .then(
+      ({ data }) => {
+        res.json(data).status(200);
+      },
+      (err) => {
+        res.header(
+          "notification",
+          JSON.stringify({
+            type: "error",
+            message: "Could Not Load Weather Conditions",
+          })
+        );
+        res.status(err.response.status).json(err);
+      }
+    );
 });
 
 router.get("/forecast", (req, res) => {
@@ -37,12 +55,21 @@ router.get("/forecast", (req, res) => {
     .get(
       `${weatherAPI.forecast}${citykey}?apikey=${process.env.WEATHER_KEY}&metric=${isMetric}`
     )
-    .then(({ data }) => {
-      res.json(data).status(200);
-    })
-    .catch((err) => {
-      res.sendStatus(403);
-    });
+    .then(
+      ({ data }) => {
+        res.json(data).status(200);
+      },
+      (err) => {
+        res.header(
+          "notification",
+          JSON.stringify({
+            type: "error",
+            message: "Could Not Load Weather Forecast",
+          })
+        );
+        res.status(err.response.status).json(err);
+      }
+    );
 });
 
 router.get("/geolocation", (req, res) => {
@@ -51,12 +78,21 @@ router.get("/geolocation", (req, res) => {
     .get(
       `${weatherAPI.geolocation}?apikey=${process.env.WEATHER_KEY}&q=${lat},${lan}`
     )
-    .then(({ data }) => {
-      res.json(data).status(200);
-    })
-    .catch((err) => {
-      res.sendStatus(403);
-    });
+    .then(
+      ({ data }) => {
+        res.json(data).status(200);
+      },
+      (err) => {
+        res.header(
+          "notification",
+          JSON.stringify({
+            type: "error",
+            message: "Could Not Load Weather By Geo Location",
+          })
+        );
+        res.status(err.response.status).json(err);
+      }
+    );
 });
 
 module.exports = router;

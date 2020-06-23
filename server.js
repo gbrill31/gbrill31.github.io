@@ -1,9 +1,17 @@
 const express = require("express");
 const path = require("path");
+const logger = require("morgan");
+const compression = require("compression");
 
 require("dotenv").config();
 
 const app = express();
+
+app.use(logger("dev"));
+
+app.use(express.static(path.join(__dirname, "build")));
+
+app.use(compression());
 
 app.use(function (req, res, next) {
   // Website you wish to allow to connect

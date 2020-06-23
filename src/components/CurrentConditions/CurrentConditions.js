@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { toast } from "react-toastify";
 import {
   Card,
   CardContent,
@@ -54,17 +53,11 @@ function CurrentConditions({
             setCurrentConditions(data[0]);
             setIsLoadingConditions(false);
           } else {
-            toast.error("Current weather conditions not found", {
-              autoClose: false,
-            });
             setIsLoadingConditions(false);
           }
         }
       } catch (err) {
         if (!isRequestCancelled) {
-          toast.error("No current weather conditions found", {
-            autoClose: false,
-          });
           setIsLoadingConditions(false);
         }
       }

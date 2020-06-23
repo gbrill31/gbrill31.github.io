@@ -13,7 +13,6 @@ import Forecast from "../../components/Forecast/Forecast";
 import { requestGeoLocation } from "../../weatherapi/weatherService";
 
 import { saveFavorite, setSlectedCity } from "../../actions";
-import { toast } from "react-toastify";
 
 import "./WeatherForecast.scss";
 
@@ -78,12 +77,10 @@ function WeatherForecast() {
             setSelectedCity(city);
           } else {
             setSelectedCity(DEFAULT_CITY);
-            toast.error("Could not find city by geo location");
           }
         }
       } catch (err) {
         setSelectedCity(DEFAULT_CITY);
-        toast.error(err, { autoClose: false });
       }
     };
     getGeolocationCity();
@@ -136,9 +133,7 @@ function WeatherForecast() {
               try {
                 const city = await requestGeoLocation(latitude, longitude);
                 setSelectedCity(city);
-              } catch (err) {
-                toast.error(err, { autoClose: false });
-              }
+              } catch (err) {}
             }}
             style={{
               transform: "translate(0, 3px)",

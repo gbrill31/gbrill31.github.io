@@ -1,8 +1,7 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useCallback } from "react";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import { debounce } from "debounce";
 import { useSelector, useDispatch } from "react-redux";
-import { toast } from "react-toastify";
 import { TextField, CircularProgress } from "@material-ui/core";
 
 import "./SearchCitiesInput.scss";
@@ -15,21 +14,12 @@ function SearchCitiesInput({ setSelectedCity, isDarkMode }) {
   const [searchInput, setSearchInput] = useState("");
   const [isSearchInputError, setIsSearchInputError] = useState(false);
 
-  const { isSearchPending, foundCities, searchError } = useSelector(
-    (state) => state.global
-  );
+  const { isSearchPending, foundCities } = useSelector((state) => state.global);
 
   const autocompleteSearch = useCallback(
     (name) => dispatch(searchCities(name)),
     [dispatch]
   );
-
-  useEffect(() => {
-    if (searchError) {
-      toast.error(searchError);
-    }
-    return () => {};
-  }, [searchError]);
 
   const searchAutocomplete = useCallback((val) => autocompleteSearch(val), [
     autocompleteSearch,

@@ -1,26 +1,21 @@
-import React, { useCallback } from "react";
-import { Route, Switch } from "react-router-dom";
+import React, { useCallback, useEffect } from "react";
+import { Route, Switch, useHistory } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { toast } from "react-toastify";
 import { createMuiTheme } from "@material-ui/core/styles";
 import { ThemeProvider } from "@material-ui/styles";
 import "react-toastify/dist/ReactToastify.css";
-import HeaderNav from "../../components/HeaderNav/HeaderNav";
-import WeatherForecast from "../WeatherForecast/WeatherForecast";
-import WeatherFavorites from "../WeatherFavorites/WeatherFavorites";
+import { HttpInterceptors } from "./utils";
+import WeatherForecast from "./views/WeatherForecast/WeatherForecast";
+import WeatherFavorites from "./views/WeatherFavorites/WeatherFavorites";
+import HeaderNav from "./components/HeaderNav/HeaderNav";
 
 import "./App.scss";
 
-import { setTempratureUnits, setDarkMode } from "../../actions";
-
-toast.configure({
-  autoClose: 8000,
-  draggable: false,
-  position: toast.POSITION.BOTTOM_LEFT,
-});
+import { setTempratureUnits, setDarkMode } from "./actions";
 
 function App() {
   const dispatch = useDispatch();
+  const history = useHistory();
 
   const { units, isDarkModeOn } = useSelector((state) => state.global);
 
@@ -31,6 +26,13 @@ function App() {
   const setDarkModeState = useCallback((isOn) => dispatch(setDarkMode(isOn)), [
     dispatch,
   ]);
+
+  useEffect(() => {
+    HttpInterceptors.initInterceptors(history);
+    return () => {
+      HttpInterceptors.clearInterceptors();
+    };
+  }, [history]);
 
   const theme = createMuiTheme({
     palette: {
