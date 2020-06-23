@@ -1,66 +1,49 @@
-import { config, apiRequests } from './weatherConfig';
+import axios from "axios";
 
 /** For local use */
 // import forecast from '../forecast.json';
 // import selectedCurrentConditions from '../currentWeather.json';
 // import autocompleteCities from '../autocomplete.json';
 
-
 const requestCitySearch = async (cityName) => {
-  try {
-    const res = await fetch(`${apiRequests.autocomplete}?apikey=${config.key}&q=${cityName}`);
-    const data = await res.json();
-    return data;
-  } catch (err) {
-    return err;
-  }
+  console.log("serach");
+  const { data } = await axios.get(`/weather/autocomplete?city=${cityName}`);
+  return data;
 
   /**For local use */
   // return autocompleteCities.filter(city => city.LocalizedName.toLowerCase().includes(cityName.toLowerCase()));
 };
 
-
 const requestForecast = async (city, units) => {
-  try {
-    const res = await fetch(`${apiRequests.forecast}${city.Key}?apikey=${config.key}&metric=${units === 'C'}`);
-    const data = await res.json();
-    return data;
-  } catch (err) {
-    return err;
-  }
+  console.log("forecast request");
+  const { data } = await axios.get(
+    `/weather/forecast?citykey=${city.Key}&units=${units}`
+  );
+  return data;
 
   /**For local use */
   // return forecast;
-
 };
 
 const requestCurrentConditions = async (city) => {
-  try {
-    const res = await fetch(`${apiRequests.currentConditions}${city.Key}?apikey=${config.key}`)
-    const data = await res.json();
-    return data;
-  } catch (err) {
-    return err;
-  }
-
+  console.log("conditions request");
+  const { data } = await axios.get(`/weather/conditions?citykey=${city.Key}`);
+  return data;
   /**For local use */
   // return selectedCurrentConditions;
-
 };
 
 const requestGeoLocation = async (lat, lan) => {
-  try {
-    const res = await fetch(`${apiRequests.geolocation}?apikey=${config.key}&q=${lat},${lan}`);
-    const data = await res.json();
-    return data;
-  } catch (err) {
-    return err;
-  }
-}
+  console.log("geolocation request");
+  const { data } = await axios.get(
+    `/weather/geolocation?lat=${lat}&lan=${lan}`
+  );
+  return data;
+};
 
 export {
   requestCitySearch,
   requestForecast,
   requestCurrentConditions,
-  requestGeoLocation
-}
+  requestGeoLocation,
+};

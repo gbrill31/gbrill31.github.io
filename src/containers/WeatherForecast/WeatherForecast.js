@@ -1,75 +1,73 @@
-import React, { Fragment, useEffect, useState, useCallback } from 'react';
-import { connect } from 'react-redux';
-import Unsplash from 'unsplash-js';
-import {
-  Container, Paper, Button, Fab
-} from '@material-ui/core';
-import FavoriteIcon from '@material-ui/icons/Favorite';
-import MyLocationIcon from '@material-ui/icons/MyLocation';
+import React, { Fragment, useEffect, useState, useCallback } from "react";
+import { connect } from "react-redux";
+import Unsplash from "unsplash-js";
+import { Container, Paper, Button, Fab } from "@material-ui/core";
+import FavoriteIcon from "@material-ui/icons/Favorite";
+import MyLocationIcon from "@material-ui/icons/MyLocation";
 
-import { useGeolocation } from '../../hooks/useGeolocation';
-import SearchCitiesInput from '../../components/SearchCitiesInput/SearchCitiesInput';
-import CurrentConditions from '../../components/CurrentConditions/CurrentConditions';
-import Forecast from '../../components/Forecast/Forecast';
+import { useGeolocation } from "../../hooks/useGeolocation";
+import SearchCitiesInput from "../../components/SearchCitiesInput/SearchCitiesInput";
+import CurrentConditions from "../../components/CurrentConditions/CurrentConditions";
+import Forecast from "../../components/Forecast/Forecast";
 
-import { requestGeoLocation } from '../../weatherapi/weatherService';
+import { requestGeoLocation } from "../../weatherapi/weatherService";
 
-import './WeatherForecast.scss';
+import { saveFavorite, setSlectedCity } from "../../actions";
+import { toast } from "react-toastify";
 
-import {
-  setSlectedCity
-} from './actions';
-
-import {
-  saveFavorite
-} from '../WeatherFavorites/actions';
-import { toast } from 'react-toastify';
+import "./WeatherForecast.scss";
 
 const unsplash = new Unsplash({
-  accessKey: '07b05aadc071c805fe2fe28c70c0666509b1690d3b7d23cb080af1b2fa530899',
+  accessKey: "07b05aadc071c805fe2fe28c70c0666509b1690d3b7d23cb080af1b2fa530899",
   headers: {
-    'SameSite': 'None',
-    'Set-Cookie': 'promo_shown=1; Max- Age=2600000; Secure'
-  }
+    SameSite: "None",
+    "Set-Cookie": "promo_shown=1; Max- Age=2600000; Secure",
+  },
 });
 
-const mapStateToProps = state => ({
-  selectedCity: state.weatherForecast.city,
-  favorites: state.weatherFavorites.items,
-  tempratureUnits: state.tempratureUnits.units,
-  isDarkMode: state.darkMode.isOn
+const mapStateToProps = (state) => ({
+  selectedCity: state.forecast.city,
+  favorites: state.favorites.items,
+  tempratureUnits: state.global.units,
+  isDarkMode: state.global.isDarkModeOn,
 });
 
-const mapDispathToProps = dispatch => ({
-  saveToFavorites: city => dispatch(saveFavorite(city)),
-  setForecastCity: city => dispatch(setSlectedCity(city))
+const mapDispathToProps = (dispatch) => ({
+  saveToFavorites: (city) => dispatch(saveFavorite(city)),
+  setForecastCity: (city) => dispatch(setSlectedCity(city)),
 });
 
-const DEFAULT_CITY = 'Tel Aviv';
+const DEFAULT_CITY = "Tel Aviv";
 
 function WeatherForecast({
-  selectedCity, saveToFavorites, favorites, setForecastCity, tempratureUnits,
-  isDarkMode
+  selectedCity,
+  saveToFavorites,
+  favorites,
+  setForecastCity,
+  tempratureUnits,
+  isDarkMode,
 }) {
-
-  const [bgPhoto, setBgPhoto] = useState('');
+  const [bgPhoto, setBgPhoto] = useState("");
   const { latitude, longitude, geoError } = useGeolocation();
 
   const loadBgImage = useCallback(({ results }) => {
-    let path = require('../../images/default_bg.jpg');
+    let path = require("../../images/default_bg.jpg");
     if (results.length) {
       path = results[0].urls.full;
     }
     const img = new Image();
     img.onload = () => {
       setBgPhoto(path);
-    }
+    };
     img.src = path;
   }, []);
 
-  const setSelectedCity = useCallback((city) => {
-    setForecastCity(city);
-  }, [setForecastCity]);
+  const setSelectedCity = useCallback(
+    (city) => {
+      setForecastCity(city);
+    },
+    [setForecastCity]
+  );
 
   useEffect(() => {
     let isRequestCancelled = false;
@@ -81,40 +79,41 @@ function WeatherForecast({
             setSelectedCity(city);
           } else {
             setSelectedCity(DEFAULT_CITY);
-            toast.error('Could not find city by geo location');
+            toast.error("Could not find city by geo location");
           }
-
         }
       } catch (err) {
         setSelectedCity(DEFAULT_CITY);
         toast.error(err, { autoClose: false });
       }
-    }
+    };
     getGeolocationCity();
 
     return () => {
       isRequestCancelled = true;
-    }
+    };
   }, [geoError, latitude, longitude, setSelectedCity]);
 
   useEffect(() => {
     if (selectedCity) {
-      unsplash.search.photos(selectedCity.LocalizedName, 1, 3, { orientation: "landscape" })
-        .then(res => res.json())
-        .then(data => {
+      unsplash.search
+        .photos(selectedCity.LocalizedName, 1, 3, { orientation: "landscape" })
+        .then((res) => res.json())
+        .then((data) => {
           loadBgImage(data);
         })
-        .catch(err => console.log(err));
+        .catch((err) => console.log(err));
     }
 
-    return () => { };
+    return () => {};
   }, [loadBgImage, selectedCity]);
 
   const isInFavorites = () => {
-    const isSaved = typeof favorites.find(city => city.Key === selectedCity.Key) === 'object';
+    const isSaved =
+      typeof favorites.find((city) => city.Key === selectedCity.Key) ===
+      "object";
     return isSaved;
-  }
-
+  };
 
   return (
     <Fragment>
@@ -122,7 +121,7 @@ function WeatherForecast({
         maxWidth="xl"
         className="forecastContainer"
         style={{
-          backgroundImage: `url(${bgPhoto})`
+          backgroundImage: `url(${bgPhoto})`,
         }}
       >
         <div className="forecastSearch">
@@ -143,54 +142,54 @@ function WeatherForecast({
               }
             }}
             style={{
-              transform: 'translate(0, 3px)'
+              transform: "translate(0, 3px)",
             }}
           >
             <MyLocationIcon />
           </Fab>
         </div>
-        {
-          selectedCity && (
-            <Paper
-              elevation={0}
-              variant="outlined"
-              className="forecastPaperWrapper"
-              style={{
-                backgroundColor: isDarkMode ? 'rgba(0,0,0,0.7)' : 'rgba(255,255,255,0.7)'
-              }}
-            >
-              <div className="forecastHeader">
-                <CurrentConditions
-                  className="justifyLeft"
-                  city={selectedCity}
-                  tempratureUnits={tempratureUnits}
-                  isInFavorites={isInFavorites()}
-                  isDarkMode={isDarkMode}
-                />
-                <Button
-                  onClick={() => {
-                    saveToFavorites(selectedCity);
-                  }}
-                  variant="contained"
-                  color="secondary"
-                  className="addToFavoritesBtn"
-                  disabled={isInFavorites()}
-                  startIcon={<FavoriteIcon />}
-                >
-                  Add To Favorites
-                </Button>
-              </div>
-              <Forecast
+        {selectedCity && (
+          <Paper
+            elevation={0}
+            variant="outlined"
+            className="forecastPaperWrapper"
+            style={{
+              backgroundColor: isDarkMode
+                ? "rgba(0,0,0,0.7)"
+                : "rgba(255,255,255,0.7)",
+            }}
+          >
+            <div className="forecastHeader">
+              <CurrentConditions
+                className="justifyLeft"
                 city={selectedCity}
-                units={tempratureUnits}
+                tempratureUnits={tempratureUnits}
+                isInFavorites={isInFavorites()}
                 isDarkMode={isDarkMode}
               />
-            </Paper>
-          )
-        }
+              <Button
+                onClick={() => {
+                  saveToFavorites(selectedCity);
+                }}
+                variant="contained"
+                color="secondary"
+                className="addToFavoritesBtn"
+                disabled={isInFavorites()}
+                startIcon={<FavoriteIcon />}
+              >
+                Add To Favorites
+              </Button>
+            </div>
+            <Forecast
+              city={selectedCity}
+              units={tempratureUnits}
+              isDarkMode={isDarkMode}
+            />
+          </Paper>
+        )}
       </Container>
     </Fragment>
-  )
+  );
 }
 
 export default connect(mapStateToProps, mapDispathToProps)(WeatherForecast);

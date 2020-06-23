@@ -1,54 +1,54 @@
-import React, { useEffect, useCallback } from 'react';
-import { connect } from 'react-redux';
-import { toast } from 'react-toastify';
-import {
-  Typography, CircularProgress
-} from '@material-ui/core';
+import React, { useEffect, useCallback } from "react";
+import { connect } from "react-redux";
+import { toast } from "react-toastify";
+import { Typography, CircularProgress } from "@material-ui/core";
 
-import './Forecast.scss';
+import "./Forecast.scss";
 
-import {
-  getCityForecast
-} from '../../containers/WeatherForecast/actions';
+import { getCityForecast } from "../../actions";
 
-const mapStateToProps = state => ({
-  forecast: state.weatherForecast.forecast,
-  isLoading: state.weatherForecast.isPending,
-  forecastError: state.weatherForecast.error
+const mapStateToProps = (state) => ({
+  forecast: state.forecast.data,
+  isLoading: state.forecast.isPending,
+  forecastError: state.forecast.error,
 });
 
-const mapDispathToProps = dispatch => ({
-  getForecast: (city, units) => dispatch(getCityForecast(city, units))
+const mapDispathToProps = (dispatch) => ({
+  getForecast: (city, units) => dispatch(getCityForecast(city, units)),
 });
-
 
 function Forecast({
-  city, forecast, getForecast, forecastError, isLoading, units,
-  isDarkMode
+  city,
+  forecast,
+  getForecast,
+  forecastError,
+  isLoading,
+  units,
+  isDarkMode,
 }) {
-
-  const getCityForecast = useCallback((cityData) => {
-    getForecast(cityData, units);
-  }, [getForecast, units]);
+  const getCityForecast = useCallback(
+    (cityData) => {
+      getForecast(cityData, units);
+    },
+    [getForecast, units]
+  );
 
   useEffect(() => {
     getCityForecast(city);
 
-    return () => { };
+    return () => {};
   }, [getCityForecast, city]);
 
   useEffect(() => {
     if (forecastError) {
       toast.error(forecastError, { autoClose: false });
     }
-
   }, [forecastError]);
 
-
   const getDayOfTheWeek = (date) => {
-    const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
     return days[new Date(date).getDay()];
-  }
+  };
 
   return forecast && !isLoading ? (
     <div className="forecastWrapper">
@@ -56,38 +56,36 @@ function Forecast({
         {forecast.Headline.Text}
       </Typography>
       <div className="forecastDaysWrapper">
-        {
-          forecast.DailyForecasts.map(item => (
-            <div
-              className="forecastDay"
-              key={item.EpochDate}
+        {forecast.DailyForecasts.map((item) => (
+          <div
+            className="forecastDay"
+            key={item.EpochDate}
+            style={{
+              backgroundColor: isDarkMode ? "#888" : "",
+            }}
+          >
+            <h3>{getDayOfTheWeek(item.Date)}</h3>
+            <img
+              className="dayIcon"
+              src={require(`../../weatherIcons/${item.Day.Icon}.svg`)}
+              alt={item.IconPhrase}
               style={{
-                backgroundColor: isDarkMode ? '#888' : ''
+                filter: isDarkMode ? "invert(1)" : "",
               }}
-            >
-              <h3>{getDayOfTheWeek(item.Date)}</h3>
-              <img
-                className="dayIcon"
-                src={require(`../../weatherIcons/${item.Day.Icon}.svg`)}
-                alt={item.IconPhrase}
-                style={{
-                  filter: isDarkMode ? 'invert(1)' : ''
-                }}
-              />
-              <h4>{item.Day.IconPhrase}</h4>
-              <h5 className="forecastDayTemp">{`Low: ${item.Temperature.Minimum.Value}º`}</h5>
-              <h5 className="forecastDayTemp">{`High: ${item.Temperature.Maximum.Value}º`}</h5>
-            </div>
-          ))
-        }
+            />
+            <h4>{item.Day.IconPhrase}</h4>
+            <h5 className="forecastDayTemp">{`Low: ${item.Temperature.Minimum.Value}º`}</h5>
+            <h5 className="forecastDayTemp">{`High: ${item.Temperature.Maximum.Value}º`}</h5>
+          </div>
+        ))}
       </div>
     </div>
   ) : (
-      <div className="forecastLoader">
-        <h5>{`Loading ${city.LocalizedName} Weather Forecast ...`}</h5>
-        <CircularProgress color="inherit" size={100} />
-      </div>
-    )
-};
+    <div className="forecastLoader">
+      <h5>{`Loading ${city.LocalizedName} Weather Forecast ...`}</h5>
+      <CircularProgress color="inherit" size={100} />
+    </div>
+  );
+}
 
 export default connect(mapStateToProps, mapDispathToProps)(Forecast);
