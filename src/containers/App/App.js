@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useCallback } from "react";
 import { Route, Switch } from "react-router-dom";
-import { connect } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import { createMuiTheme } from "@material-ui/core/styles";
 import { ThemeProvider } from "@material-ui/styles";
@@ -13,26 +13,28 @@ import "./App.scss";
 
 import { setTempratureUnits, setDarkMode } from "../../actions";
 
-const mapStateToProps = (state) => ({
-  units: state.global.units,
-  isDarkMode: state.global.isDarkModeOn,
-});
-
-const mapDispathToProps = (dispatch) => ({
-  saveWeatherUnits: (units) => dispatch(setTempratureUnits(units)),
-  setDarkModeState: (isOn) => dispatch(setDarkMode(isOn)),
-});
-
 toast.configure({
   autoClose: 8000,
   draggable: false,
   position: toast.POSITION.BOTTOM_LEFT,
 });
 
-function App({ saveWeatherUnits, units, setDarkModeState, isDarkMode }) {
+function App() {
+  const dispatch = useDispatch();
+
+  const { units, isDarkModeOn } = useSelector((state) => state.global);
+
+  const saveWeatherUnits = useCallback(
+    (units) => dispatch(setTempratureUnits(units)),
+    [dispatch]
+  );
+  const setDarkModeState = useCallback((isOn) => dispatch(setDarkMode(isOn)), [
+    dispatch,
+  ]);
+
   const theme = createMuiTheme({
     palette: {
-      type: isDarkMode ? "dark" : "light",
+      type: isDarkModeOn ? "dark" : "light",
       primary: {
         main: "#272727",
         dark: "#09608e",
@@ -54,7 +56,7 @@ function App({ saveWeatherUnits, units, setDarkModeState, isDarkMode }) {
         <HeaderNav
           saveWeatherUnits={saveWeatherUnits}
           units={units}
-          isDarkMode={isDarkMode}
+          isDarkMode={isDarkModeOn}
           setIsDarkMode={setDarkModeState}
         />
 
@@ -69,4 +71,4 @@ function App({ saveWeatherUnits, units, setDarkModeState, isDarkMode }) {
   );
 }
 
-export default connect(mapStateToProps, mapDispathToProps)(App);
+export default App;

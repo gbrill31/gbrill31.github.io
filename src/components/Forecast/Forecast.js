@@ -1,5 +1,5 @@
 import React, { useEffect, useCallback } from "react";
-import { connect } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import { Typography, CircularProgress } from "@material-ui/core";
 
@@ -7,37 +7,25 @@ import "./Forecast.scss";
 
 import { getCityForecast } from "../../actions";
 
-const mapStateToProps = (state) => ({
-  forecast: state.forecast.data,
-  isLoading: state.forecast.isPending,
-  forecastError: state.forecast.error,
-});
+function Forecast({ city, units, isDarkMode }) {
+  const dispatch = useDispatch();
 
-const mapDispathToProps = (dispatch) => ({
-  getForecast: (city, units) => dispatch(getCityForecast(city, units)),
-});
+  const {
+    data: forecast,
+    isPending: isLoading,
+    error: forecastError,
+  } = useSelector((state) => state.forecast);
 
-function Forecast({
-  city,
-  forecast,
-  getForecast,
-  forecastError,
-  isLoading,
-  units,
-  isDarkMode,
-}) {
-  const getCityForecast = useCallback(
-    (cityData) => {
-      getForecast(cityData, units);
-    },
-    [getForecast, units]
+  const getForecast = useCallback(
+    (city, units) => dispatch(getCityForecast(city, units)),
+    [dispatch]
   );
 
   useEffect(() => {
-    getCityForecast(city);
+    getForecast(city);
 
     return () => {};
-  }, [getCityForecast, city]);
+  }, [getForecast, city]);
 
   useEffect(() => {
     if (forecastError) {
@@ -88,4 +76,4 @@ function Forecast({
   );
 }
 
-export default connect(mapStateToProps, mapDispathToProps)(Forecast);
+export default Forecast;

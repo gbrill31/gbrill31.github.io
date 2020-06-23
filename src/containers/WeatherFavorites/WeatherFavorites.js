@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { connect } from "react-redux";
+import React, { useState, useEffect, useCallback } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { Container, Button } from "@material-ui/core";
 
@@ -10,29 +10,28 @@ import "./WeatherFavorites.scss";
 
 import { setSlectedCity, loadFavorites, clearFavorite } from "../../actions";
 
-const mapStateToProps = (state) => ({
-  favorites: state.favorites.items,
-  isSaved: state.favorites.isSaved,
-  tempratureUnits: state.global.units,
-  isDarkMode: state.global.isDarkModeOn,
-});
-
-const mapDispathToProps = (dispatch) => ({
-  loadFromFavorites: () => dispatch(loadFavorites()),
-  clearAllFavorites: () => dispatch(clearFavorite()),
-  setForecastCity: (city) => dispatch(setSlectedCity(city)),
-});
-
-function WeatherFavorites({
-  loadFromFavorites,
-  favorites,
-  setForecastCity,
-  clearAllFavorites,
-  tempratureUnits,
-  isDarkMode,
-}) {
+function WeatherFavorites() {
   const history = useHistory();
+  const dispatch = useDispatch();
+
   const [isPrompt, setIsPrompt] = useState(false);
+
+  const { items: favorites } = useSelector((state) => state.favorites);
+
+  const { units: tempratureUnits, isDarkModeOn } = useSelector(
+    (state) => state.global
+  );
+
+  const loadFromFavorites = useCallback(() => dispatch(loadFavorites()), [
+    dispatch,
+  ]);
+  const clearAllFavorites = useCallback(() => dispatch(clearFavorite()), [
+    dispatch,
+  ]);
+  const setForecastCity = useCallback(
+    (city) => dispatch(setSlectedCity(city)),
+    [dispatch]
+  );
 
   useEffect(() => {
     loadFromFavorites();
@@ -62,12 +61,12 @@ function WeatherFavorites({
       maxWidth="xl"
       className="favoritesContainer"
       style={{
-        backgroundColor: isDarkMode ? "#333" : "",
+        backgroundColor: isDarkModeOn ? "#333" : "",
       }}
     >
       <h1
         style={{
-          color: isDarkMode ? "#fff" : "",
+          color: isDarkModeOn ? "#fff" : "",
         }}
       >
         Your Favorite Cities
@@ -87,7 +86,7 @@ function WeatherFavorites({
               key={city.Key}
               className="favoriteWrapper"
               style={{
-                backgroundColor: isDarkMode ? "#888" : "",
+                backgroundColor: isDarkModeOn ? "#888" : "",
               }}
             >
               <Button
@@ -100,7 +99,7 @@ function WeatherFavorites({
                 <CurrentConditions
                   city={city}
                   tempratureUnits={tempratureUnits}
-                  isDarkMode={isDarkMode}
+                  isDarkMode={isDarkModeOn}
                 />
               </Button>
             </div>
@@ -117,4 +116,4 @@ function WeatherFavorites({
   );
 }
 
-export default connect(mapStateToProps, mapDispathToProps)(WeatherFavorites);
+export default WeatherFavorites;

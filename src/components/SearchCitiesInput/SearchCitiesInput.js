@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import { debounce } from "debounce";
-import { connect } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import { TextField, CircularProgress } from "@material-ui/core";
 
@@ -9,26 +9,20 @@ import "./SearchCitiesInput.scss";
 
 import { searchCities } from "../../actions";
 
-const mapStateToProps = (state) => ({
-  isSearchPending: state.global.isSearchPending,
-  citiesFound: state.global.foundCities,
-  searchError: state.global.searchError,
-});
+function SearchCitiesInput({ setSelectedCity, isDarkMode }) {
+  const dispatch = useDispatch();
 
-const mapDispatchToProps = (dispatch) => ({
-  autocompleteSearch: (name) => dispatch(searchCities(name)),
-});
-
-function SearchCitiesInput({
-  isSearchPending,
-  citiesFound,
-  searchError,
-  autocompleteSearch,
-  setSelectedCity,
-  isDarkMode,
-}) {
   const [searchInput, setSearchInput] = useState("");
   const [isSearchInputError, setIsSearchInputError] = useState(false);
+
+  const { isSearchPending, foundCities, searchError } = useSelector(
+    (state) => state.global
+  );
+
+  const autocompleteSearch = useCallback(
+    (name) => dispatch(searchCities(name)),
+    [dispatch]
+  );
 
   useEffect(() => {
     if (searchError) {
@@ -56,7 +50,7 @@ function SearchCitiesInput({
 
   const handleSearchSelection = (event, cityName) => {
     if (cityName) {
-      const cityObj = citiesFound.find(
+      const cityObj = foundCities.find(
         (city) => city.LocalizedName.toLowerCase() === cityName.toLowerCase()
       );
       setSelectedCity(cityObj);
@@ -71,7 +65,7 @@ function SearchCitiesInput({
       id="weather-autocomplete-search"
       className="autocompleteField"
       inputValue={searchInput}
-      options={citiesFound.map((city) => city.LocalizedName)}
+      options={foundCities.map((city) => city.LocalizedName)}
       loading={isSearchPending}
       blurOnSelect
       clearOnEscape
@@ -119,4 +113,4 @@ function SearchCitiesInput({
   );
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(SearchCitiesInput);
+export default SearchCitiesInput;

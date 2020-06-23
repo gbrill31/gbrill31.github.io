@@ -1,5 +1,5 @@
 import React, { Fragment, useEffect, useState, useCallback } from "react";
-import { connect } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import Unsplash from "unsplash-js";
 import { Container, Paper, Button, Fab } from "@material-ui/core";
 import FavoriteIcon from "@material-ui/icons/Favorite";
@@ -25,30 +25,29 @@ const unsplash = new Unsplash({
   },
 });
 
-const mapStateToProps = (state) => ({
-  selectedCity: state.forecast.city,
-  favorites: state.favorites.items,
-  tempratureUnits: state.global.units,
-  isDarkMode: state.global.isDarkModeOn,
-});
-
-const mapDispathToProps = (dispatch) => ({
-  saveToFavorites: (city) => dispatch(saveFavorite(city)),
-  setForecastCity: (city) => dispatch(setSlectedCity(city)),
-});
-
 const DEFAULT_CITY = "Tel Aviv";
 
-function WeatherForecast({
-  selectedCity,
-  saveToFavorites,
-  favorites,
-  setForecastCity,
-  tempratureUnits,
-  isDarkMode,
-}) {
+function WeatherForecast() {
+  const dispatch = useDispatch();
+
   const [bgPhoto, setBgPhoto] = useState("");
   const { latitude, longitude, geoError } = useGeolocation();
+
+  const { city: selectedCity, items: favorites } = useSelector(
+    (state) => state.favorites
+  );
+
+  const { units: tempratureUnits, isDarkModeOn } = useSelector(
+    (state) => state.global
+  );
+
+  const saveToFavorites = useCallback((city) => dispatch(saveFavorite(city)), [
+    dispatch,
+  ]);
+  const setForecastCity = useCallback(
+    (city) => dispatch(setSlectedCity(city)),
+    [dispatch]
+  );
 
   const loadBgImage = useCallback(({ results }) => {
     let path = require("../../images/default_bg.jpg");
@@ -127,7 +126,7 @@ function WeatherForecast({
         <div className="forecastSearch">
           <SearchCitiesInput
             setSelectedCity={setSelectedCity}
-            isDarkMode={isDarkMode}
+            isDarkMode={isDarkModeOn}
           />
           <Fab
             color="secondary"
@@ -154,7 +153,7 @@ function WeatherForecast({
             variant="outlined"
             className="forecastPaperWrapper"
             style={{
-              backgroundColor: isDarkMode
+              backgroundColor: isDarkModeOn
                 ? "rgba(0,0,0,0.7)"
                 : "rgba(255,255,255,0.7)",
             }}
@@ -165,7 +164,7 @@ function WeatherForecast({
                 city={selectedCity}
                 tempratureUnits={tempratureUnits}
                 isInFavorites={isInFavorites()}
-                isDarkMode={isDarkMode}
+                isDarkMode={isDarkModeOn}
               />
               <Button
                 onClick={() => {
@@ -183,7 +182,7 @@ function WeatherForecast({
             <Forecast
               city={selectedCity}
               units={tempratureUnits}
-              isDarkMode={isDarkMode}
+              isDarkMode={isDarkModeOn}
             />
           </Paper>
         )}
@@ -192,4 +191,4 @@ function WeatherForecast({
   );
 }
 
-export default connect(mapStateToProps, mapDispathToProps)(WeatherForecast);
+export default WeatherForecast;
